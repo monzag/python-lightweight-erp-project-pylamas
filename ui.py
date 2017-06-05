@@ -19,7 +19,7 @@ def print_table(table, title_list):
         This function doesn't return anything it only prints to console.
     """
 
-    # your goes code
+
 
     pass
 
@@ -62,9 +62,13 @@ def print_menu(title, list_options, exit_message):
         This function doesn't return anything it only prints to console.
     """
 
-    # your code
+    option_number = 1
 
-    pass
+    print('{}:'.format(title))
+    for i in list_options:
+        print('    ({}) '.format(option_number) + i)
+        option_number += 1
+    print('    (0) {}'.format(exit_message))
 
 
 def get_inputs(list_labels, title):
@@ -88,7 +92,10 @@ def get_inputs(list_labels, title):
     """
     inputs = []
 
-    # your code
+    print('{}:'.format(title))
+    for i in list_labels:
+        answer = (input('{} '.format(i)))
+        inputs.append(answer)
 
     return inputs
 
@@ -107,6 +114,14 @@ def print_error_message(message):
         This function doesn't return anything it only prints to console.
     """
 
-    # your code
+    print(message)
 
-    pass
+# FOR TESTS:
+#title = "Main menu"
+#list_options = ['Jedna opcja', 'Druga opcja', 'blabla3423#$@']
+#exit_message = "Do widzenia!"
+#print_menu(title, list_options, exit_message)
+
+#list_labels = ['Age', 'Surname', 'Cos tam']
+#title_input = 'Wpisz byle co, bo testujemy'
+#print(get_inputs(list_labels, title_input))
