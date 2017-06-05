@@ -36,7 +36,11 @@ def start_module():
     user_choice = ui.get_inputs(["Menu number"], "Select action by menu number")
 
     if user_choice[0] == "1":
-         table = get_file_path
+        table = get_file_path()
+        show_table(table)
+    elif user_choice[0] == "2":
+        table = get_file_path()
+
 
 
 
@@ -51,10 +55,8 @@ def show_table(table):
     Returns:
         None
     """
-
-    # your code
-
-    pass
+    title_list = ["id", "Name and Surname", "Year of birth"]
+    print_table(table, title_list)
 
 
 def add(table):
@@ -67,8 +69,16 @@ def add(table):
     Returns:
         Table with a new record
     """
+    list_labels = ["Name and Surname", "Year of birth(yyyy)"]
+    data_input = ui.get_inputs(list_labels, "Add new record")
+    id_ = common.generate_random(table)
+    is_date_number = data_input[0].isdigit()
 
-    # your code
+    if is_date_number is True:
+        data_input.insert(0, id_)
+        table.append(data_input)
+    else:
+
 
     return table
 
@@ -141,4 +151,3 @@ def get_persons_closest_to_average(table):
     # your code
 
     pass
-
