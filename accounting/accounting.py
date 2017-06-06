@@ -48,13 +48,9 @@ def start_module():
             add(table)
         if menu == '3':
             show_table(table)
-            id_ = ui.get_inputs([''], 'Type id of record')[0]
-            ids = common.get_value_from(table, 0)
-            if id_ in ids:
-                table = remove(table, id_)
-            else:
-                ui.print_error_message('There is no record with this id')
+            table = find_and_remove_record(table)
         if menu == '4':
+            show_table(table)
             update(table, id_)
         if menu == '0':
             data_manager.write_table_to_file(file_path, table)
@@ -128,6 +124,22 @@ def is_date_valid(month, day, year):
 
 def is_value_valid(in_out, amount):
     return in_out in ['in', 'out'] and common.is_money_valid(amount)
+
+
+def get_id_from_user(table):
+    id_ = ui.get_inputs([''], 'Type id of record')[0]
+    ids = common.get_value_from(table, 0)
+    if id_ not in ids:
+        ui.print_error_message('There is no record with this id')
+    else:
+        return id_
+
+
+def find_and_remove_record(table):
+    id_ = get_id_from_user(table)
+    if id_ != None:
+        table = remove(table, id_)
+    return table
 
 
 def remove(table, id_):
