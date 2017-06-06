@@ -27,13 +27,9 @@ def start_module():
     Returns:
         None
     """
-    file_path = os.getcwd() + '/accounting/items.csv'
-    if os.path.exists(file_path):
-        table = data_manager.get_table_from_file(file_path)
-    else:
-        table = []
+    table = get_archive()
 
-    title = 'Accounting'
+    title = 'Accounting archive'
     list_options = ['Show archived incomes/outcomes',
                     'Add to archive  income/outcome',
                     'Remove existing income/outcome',
@@ -44,7 +40,6 @@ def start_module():
     while menu != '0':
         ui.print_menu(title, list_options, exit_message)
         menu = ui.get_inputs([''], 'Choose action to perform')[0]
-        print(menu)
         
         if menu == '1':
             show_table(table)
@@ -60,6 +55,15 @@ def start_module():
             ui.print_error_message('Invalid input')
 
 
+def get_archive():
+    file_path = os.getcwd() + '/accounting/items.csv'
+    if os.path.exists(file_path):
+        table = data_manager.get_table_from_file(file_path)
+    else:
+        table = []
+    return table
+
+
 def show_table(table):
     """
     Display a table
@@ -70,11 +74,14 @@ def show_table(table):
     Returns:
         None
     """
-    # title_list = ['id', 'month', 'day', 'year', 'type', 'amount']
-    # ui.print_table(table, title_list)
     
+    title_list = ['id', 'month', 'day', 'year', 'type', 'amount']
+    
+    ui.print_table(table, title_list)
+    '''
     print('Archived accountings: ')
     print('\n'.join(' : '.join(element) for element in table))
+    '''
     
     
 
@@ -111,12 +118,12 @@ def is_record_valid(record):
     Parameters:
         record - list of values
     
-    Returns:
+    Returns:if len(str(title_list[item_index])) > len(longest_string):
         boolean
     """
     [month, day, year, in_out, amount] = record
 
-    if common.is_month_valid(month) and common.is_day_valid(day) and common.is_year_valid(year) and in_out.lower() in ['in', 'out'] and common.is_money_legit(amount):
+    if common.is_month_valid(month) and common.is_day_valid(day) and common.is_year_valid(year) and in_out.lower() in ['in', 'out'] and common.is_money_valid(amount):
         return True
     return False
 

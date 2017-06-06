@@ -22,8 +22,8 @@ def print_table(table, title_list):
     CELL_PADDING = 2
     columns_number = len(table[0])
 
-    outer_row = create_outer_row(table, columns_number, MIN_COLUMN_WIDTH, CELL_PADDING)
-    middle_row = create_middle_row(table, columns_number, MIN_COLUMN_WIDTH, CELL_PADDING)
+    outer_row = create_outer_row(table, columns_number, title_list, MIN_COLUMN_WIDTH, CELL_PADDING)
+    middle_row = create_middle_row(table, columns_number, title_list, MIN_COLUMN_WIDTH, CELL_PADDING)
 
     print('◤{}◥'.format(outer_row))
     for i in range(len(table)):  # jak to poprawić?
@@ -55,7 +55,7 @@ def create_data_row(table, list_index, title_list, MIN_COLUMN_WIDTH, CELL_PADDIN
     return data_row
 
 
-def create_middle_row(table, columns_number, MIN_COLUMN_WIDTH, CELL_PADDING):
+def create_middle_row(table, columns_number, title_list, MIN_COLUMN_WIDTH, CELL_PADDING):
 
     middle_row = '|'
 
@@ -69,7 +69,7 @@ def create_middle_row(table, columns_number, MIN_COLUMN_WIDTH, CELL_PADDING):
     return middle_row
 
 
-def create_outer_row(table, columns_number, MIN_COLUMN_WIDTH, CELL_PADDING):
+def create_outer_row(table, columns_number, title_list, MIN_COLUMN_WIDTH, CELL_PADDING):
 
     outer_row = ''
 
