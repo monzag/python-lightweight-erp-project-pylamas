@@ -49,11 +49,14 @@ def start_module():
             add(table)
             data_manager.write_table_to_file(file_path, table)
         elif option == '3':
-            remove(table, id_)
+            show_table(table)
+            table = find_and_remove_record(table)
             data_manager.write_table_to_file(file_path, table)
         elif option == '4':
             update(table, id_)
             data_manager.write_table_to_file(file_path, table)
+        elif option == '5':
+            get_counts_by_manufacturers(table)
         elif option == '0':
             break
         else:
@@ -110,6 +113,22 @@ def add(table):
     return table
 
 
+def get_id_from_user(table):
+    id_ = ui.get_inputs([''], 'Type id of record')[0]
+    ids = common.get_value_from(table, 0)
+    if id_ not in ids:
+        ui.print_error_message('There is no record with this id')
+    else:
+        return id_
+
+
+def find_and_remove_record(table):
+    id_ = get_id_from_user(table)
+    if id_ != None:
+        table = remove(table, id_)
+    return table
+
+
 def remove(table, id_):
     """
     Remove a record with a given id from the table.
@@ -154,10 +173,25 @@ def update(table, id_):
 # the question: How many different kinds of game are available of each manufacturer?
 # return type: a dictionary with this structure: { [manufacturer] : [count] }
 def get_counts_by_manufacturers(table):
+    """
+    Counts the number of games by each manufacturer.
 
-    # your code
+    Args:
+        table: list of lists containing details of each game
 
-    pass
+    Returns:
+        dictionary with manufacturer as a key (str) and games number as a value (int)
+        (e.g. {'Blizzard Entertainment' : 3})
+    """
+    counts_by_manufacturers = {}
+
+    for i in table:
+        if i[2] not in counts_by_manufacturers:
+            counts_by_manufacturers[i[2]] = 1
+        elif i[2] in counts_by_manufacturers:
+            counts_by_manufacturers[i[2]] += 1
+
+    return counts_by_manufacturers
 
 
 # the question: What is the average amount of games in stock of a given manufacturer?

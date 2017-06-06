@@ -45,13 +45,23 @@ def start_module():
         if menu == '1':
             show_table(table)
         if menu == '2':
-            add(table)
+            table = add(table)
         if menu == '3':
             show_table(table)
-            table = find_and_remove_record(table)
+            id_ = ui.get_inputs([''], 'Type id of record')[0]
+            ids = common.get_value_from(table, 0)
+            if id_ in ids:
+                table = remove(table, id_)
+            else:
+                ui.print_error_message('There is no record with this id')
         if menu == '4':
             show_table(table)
-            update(table, id_)
+            id_ = ui.get_inputs([''], 'Type id of record')[0]
+            ids = common.get_value_from(table, 0)
+            if id_ in ids:
+                table = update(table, id_)
+            else:
+                ui.print_error_message('There is no record with this id')
         if menu == '0':
             data_manager.write_table_to_file(file_path, table)
         else:
@@ -90,8 +100,7 @@ def add(table):
     Returns:
         Table with a new record
     """
-    list_labels = ['month(mm)', 'day(dd)', 'year(yyyy)', 'type(in/out)', 'amount($)']
-    new_record = ui.get_inputs(list_labels, 'Archive new accounting')
+    new_record = get_record_from_user()
 
     if is_record_valid(new_record):
         ids = common.get_value_from(table, 0)
@@ -102,6 +111,12 @@ def add(table):
         ui.print_error_message('Invalid input format.\nYour record will not be added to archive.')
 
     return table
+
+
+def get_record_from_user():
+    list_labels = ['month(mm)', 'day(dd)', 'year(yyyy)', 'type(in/out)', 'amount($)']
+    new_record = ui.get_inputs(list_labels, 'Archive new accounting')
+    return new_record
 
 
 def is_record_valid(record):
@@ -124,22 +139,6 @@ def is_date_valid(month, day, year):
 
 def is_value_valid(in_out, amount):
     return in_out in ['in', 'out'] and common.is_money_valid(amount)
-
-
-def get_id_from_user(table):
-    id_ = ui.get_inputs([''], 'Type id of record')[0]
-    ids = common.get_value_from(table, 0)
-    if id_ not in ids:
-        ui.print_error_message('There is no record with this id')
-    else:
-        return id_
-
-
-def find_and_remove_record(table):
-    id_ = get_id_from_user(table)
-    if id_ != None:
-        table = remove(table, id_)
-    return table
 
 
 def remove(table, id_):
@@ -169,9 +168,12 @@ def update(table, id_):
     Returns:
         table with updated record
     """
-
-    # your code
-
+    old_record = common.find_id(table, id_)
+    updated_record = get_record_from_user()
+    if is_record_valid(updated_record):
+        table = common.remove_record(table, old_record)
+        updated_record.insert(0, id_)
+        table.append(updated_record)
     return table
 
 
