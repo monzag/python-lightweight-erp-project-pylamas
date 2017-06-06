@@ -11,6 +11,7 @@ import random
 # @table: list of lists
 # @generated: string - randomly generated string (unique in the @table)
 def generate_random(table):
+    # zmniejszę to, obiecuję :D
     """
     Generates random and unique string. Used for id/key generation.
 
@@ -21,8 +22,60 @@ def generate_random(table):
         Random and unique string
     """
 
-    generated = ''
+    special_char = ['#', '$', '%', '&', '!']
+    letter_low = [
+                  'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 
+                  'o', 'p', 'q', 'r', 's', 't', 'u', 'w', 'x', 'y', 'z'
+                 ]
 
-    # your code
+    letter_upper = [item.upper() for item in letter_low]
+    digit = random.randrange(10)
+
+    generated = ''
+    count = 0
+    while count < 8:
+        if count < 5:
+            generated += random.choice(letter_low)
+            generated += random.choice(letter_upper)
+            generated += str(digit)
+            count += 3
+
+        elif count > 5:
+            generated += random.choice(special_char)
+            count += 1
+
+        for item in table:
+            if item == generated:
+                count = 0
 
     return generated
+
+
+def find_id(table, id_):
+    '''In list of lists find record by id number. Return record.
+    Use in remove() and update()'''
+
+    for record in table:
+        for item in record:
+            if item == id_:
+                return record
+
+
+def remove_record(table, record):
+    '''Remove record (list of lists) in table. Return table. Use in remove()'''
+
+    for index, item in enumerate(table):
+        if item == record:
+            table.pop(index)
+
+    return table
+
+
+def insert_new_data(record, new_data, position):
+    '''Replace old data with new_data on proper position in record (list of lists). 
+    Return record. Use in update()'''
+
+    record[position] = new_data
+    return record
+
+
