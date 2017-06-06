@@ -44,9 +44,8 @@ def start_module():
 
     elif user_choice[0] == "3":
         table = get_file_and_print()
-        record_id = ui.get_inputs(["Id: "], "Type id of record to remove")
-        record = common.find_id(table, record_id[0])
-        table = common.remove_record(table, record)
+        id_ = ui.get_inputs(["Id: "], "Type id of record to remove")
+        table = remove(table, id_)
         show_table(table)
 
 
@@ -100,7 +99,9 @@ def remove(table, id_):
         Table without specified record.
     """
 
-    # your code
+    record = common.find_id(table, id_[0])
+    table = common.remove_record(table, record)
+
 
     return table
 
