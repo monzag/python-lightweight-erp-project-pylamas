@@ -110,6 +110,22 @@ def add(table):
     return table
 
 
+def get_id_from_user(table):
+    id_ = ui.get_inputs([''], 'Type id of record')[0]
+    ids = common.get_value_from(table, 0)
+    if id_ not in ids:
+        ui.print_error_message('There is no record with this id')
+    else:
+        return id_
+
+
+def find_and_remove_record(table):
+    id_ = get_id_from_user(table)
+    if id_ != None:
+        table = remove(table, id_)
+    return table
+
+
 def remove(table, id_):
     """
     Remove a record with a given id from the table.
