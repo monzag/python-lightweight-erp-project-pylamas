@@ -25,12 +25,12 @@ def start_module():
         None
     """
 
-    exit_message = "5.Back to main menu."
+    exit_message = "Back to main menu."
 
-    list_options = ["1.Show list of employees.",
-                    "2.Add new employee.",
-                    "3.Remove ann employee by id."
-                    "4.Update info about employee."]
+    list_options = ["Show list of employees.",
+                    "Add new employee.",
+                    "Update record by id"
+                    "Update info about employee."]
 
     ui.print_menu("Human Resources", list_options, exit_message)
     user_choice = ui.get_inputs(["Menu number: "], "Select action by menu number")
@@ -41,9 +41,6 @@ def start_module():
     elif user_choice[0] == "2":
         table = get_file_path()
         add(table)
-
-
-
 
 
 def show_table(table):
@@ -127,7 +124,7 @@ def get_file_path():
     """
 
     full_path = os.getcwd()
-    file_name = full_path + "/persons.csv"
+    file_name = full_path + "/hr/persons.csv"
     table = data_manager.get_table_from_file(file_name)
 
     return table
@@ -152,4 +149,3 @@ def get_persons_closest_to_average(table):
     # your code
 
     pass
-start_module()
