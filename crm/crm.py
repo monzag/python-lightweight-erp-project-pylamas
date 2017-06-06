@@ -47,11 +47,14 @@ def start_module():
         elif menu == '2':
             add(table)
         elif menu == '3':
-            id_ = 'iN7hQ7$&'
-            remove(table, id_)
+            id_ = ui.get_inputs([''], 'Write id: ')
+            table = remove(table, id_)
+            show_table(table)
         elif menu == '4':
-            id_ = 'bH34Jx#&'
+            id_ = ui.get_inputs([''], 'Write id: ')
+            id_ = id_[0]
             update(table, id_)
+
         elif menu == '0':
             data_manager.write_table_to_file(file_path, table)
         else:
@@ -93,8 +96,8 @@ def add(table):
         Table with a new record
     """
 
-    list_lables = ['name: ', 'e-mail: ', 'newsletter(y/n): ']
-    new_record = ui.get_inputs(list_lables, 'Please provide information about subscriber')
+    list_labels = ['name: ', 'e-mail: ', 'newsletter(y/n): ']
+    new_record = ui.get_inputs(list_labels, 'Please provide information about subscriber')
 
     if is_email_valid(new_record[1]):
         id_ = common.generate_random(table)
@@ -123,12 +126,33 @@ def remove(table, id_):
 
     Returns:
         Table without specified record.
-    """ 
+    """
 
-    record = common.find_id(table, id_)
+    record = common.find_id(table, id_[0])
     common.remove_record(table, record)
 
     return table
+
+
+def item_to_change():
+    '''Open menu with options, user choose which element should be change.
+    Index this element in list is 'options'
+    Use in update'''
+
+    title = 'What do you want to change? '
+    list_options = ['name ',
+                    'e-mail ',
+                    'newsletter(y/n) ']
+    exit_message = 'Back to main menu'
+    ui.print_menu(title, list_options, exit_message)
+    inputs = ui.get_inputs([''], 'Choose option')
+    option = int(inputs[0])
+
+    if option in range(len(list_options) + 1):
+        return option
+
+    else:
+        return 'Bad number'
 
 
 def update(table, id_):
@@ -142,11 +166,12 @@ def update(table, id_):
     Returns:
         table with updated record
     """
-    # user can choose what he want to change? Ex. name in position 1
-    position = 1
-    new_data = 'new_name'
+
     record = common.find_id(table, id_)
-    common.insert_new_data(record, new_data, position)
+    option = item_to_change()
+    new_data = ui.get_inputs([''], 'Please write new data')
+    new_data = new_data[0]
+    common.insert_new_data(record, new_data, option)
 
     return table
 
