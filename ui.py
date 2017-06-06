@@ -192,19 +192,3 @@ def print_error_message(message):
     """
 
     print(message)
-
-# FOR TESTS:
-#title = "Main menu"
-#list_options = ['Jedna opcja', 'Druga opcja', 'blabla3423#$@']
-#exit_message = "Do widzenia!"
-#print_menu(title, list_options, exit_message)
-
-#list_labels = ['Age', 'cos tam']
-#title_input = 'Wpisz byle co, bo testujemy'
-#print(get_inputs(list_labels, title_input))
-
-table = [['234653633646', '34624256', '4564', '54', '64'], ['656333667734', '34672', '4534', '1sdghe3', '3aassa2'],
-['123373441231', '54354', '6346', '42', '32'], ['222539048759', '23424', '4522', '43', '21'],
-['1023342423423438743', '23423', '6364', 'fsdfdgdgsdg78', '65']]
-title_list = ['jedne dane', 'drugie dane', 'bal', 'lab', 'x']
-print_table(table, title_list)
