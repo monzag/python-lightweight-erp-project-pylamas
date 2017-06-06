@@ -49,7 +49,8 @@ def start_module():
             add(table)
             data_manager.write_table_to_file(file_path, table)
         elif option == '3':
-            remove(table, id_)
+            show_table(table)
+            table = find_and_remove_record(table)
             data_manager.write_table_to_file(file_path, table)
         elif option == '4':
             update(table, id_)
@@ -171,7 +172,9 @@ def update(table, id_):
 # return type: a dictionary with this structure: { [manufacturer] : [count] }
 def get_counts_by_manufacturers(table):
 
-    # your code
+    games_by_manufacturers = {}
+
+    
 
     pass
 
