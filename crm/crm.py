@@ -36,11 +36,10 @@ def start_module():
                     'Update data of subscriber']
     exit_message = 'Back to main menu'
 
-    menu = None
+    menu = True
     while menu != '0':
         ui.print_menu(title, list_options, exit_message)
-        inputs = ui.get_inputs([''], 'Choose action to perform')
-        menu = inputs[0]
+        menu = ui.get_inputs([''], 'Choose action')[0]
 
         if menu == '1':
             show_table(table)
@@ -72,7 +71,7 @@ def show_table(table):
         None
     """
 
-    title_list = ['id', 'name', 'e-mail', 'newsletter(y/n)']
+    title_list = ['id', 'name', 'e-mail', 'newsletter? (yes = 1 / no = 0)']
     ui.print_table(table, title_list)
 
 
@@ -96,13 +95,17 @@ def add(table):
         Table with a new record
     """
 
-    list_labels = ['name: ', 'e-mail: ', 'newsletter(y/n): ']
+    list_labels = ['name: ', 'e-mail: ', 'newsletter? (yes = 1 / no = 0): ']
     new_record = ui.get_inputs(list_labels, 'Please provide information about subscriber')
 
-    if is_email_valid(new_record[1]):
+    email = new_record[1]
+    newsletter = new_record[2]
+
+    if is_email_valid(email) and is_newsletter_valid(newsletter):
         id_ = common.generate_random(table)
         new_record.insert(0, id_)
         table.append(new_record)
+
     else:
         ui.print_error_message('Invalid input format.\nYour record will not be added.')
 
@@ -110,7 +113,20 @@ def add(table):
 
 
 def is_email_valid(email):
+    '''Check that @ occur in email
+    If not: false'''
+
     if '@' in email:
+        return True
+    else:
+        return False
+
+
+def is_newsletter_valid(newsletter):
+    '''Check that user write 1 or 0.
+    If something else: False'''
+
+    if newsletter == '1' or newsletter == '0':
         return True
     else:
         return False
@@ -142,16 +158,12 @@ def item_to_change():
     title = 'What do you want to change? '
     list_options = ['name ',
                     'e-mail ',
-                    'newsletter(y/n) ']
+                    'newsletter? (yes = 1 / no = 0): ']
     exit_message = 'Back to main menu'
     ui.print_menu(title, list_options, exit_message)
     inputs = ui.get_inputs([''], 'Choose option')
     option = int(inputs[0])
 
-    '''if option in range(len(list_options) + 1):
-        return option
-
-    else:'''
     return option
 
 
@@ -169,10 +181,20 @@ def update(table, id_):
 
     record = common.find_id(table, id_)
     option = item_to_change()
-    if option in range(1, 4):
-        new_data = ui.get_inputs([''], 'Please write new data')
-        new_data = new_data[0]
-        common.insert_new_data(record, new_data, option)
+
+    # range of options
+    first_option = 1
+    last_option = 3
+
+    if option in range(first_option, last_option+1):
+        new_data = ui.get_inputs([''], 'Please write new data')[0]
+
+        # check condition for name or email or newsletter
+        if option == 1 or is_email_valid(new_data) or is_newsletter_valid(new_data):
+            common.insert_new_data(record, new_data, option)
+
+        else:
+            ui.print_error_message('Invalid input format.\nYour record will not be added.')
 
     return table
 
