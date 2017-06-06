@@ -103,8 +103,7 @@ def add(table):
     new_record = get_record_from_user()
 
     if is_record_valid(new_record):
-        ids = common.get_value_from(table, 0)
-        id_ = common.generate_random(ids)
+        id_ = common.generate_random(table)
         new_record.insert(0, id_)
         table.append(new_record)
     else:
