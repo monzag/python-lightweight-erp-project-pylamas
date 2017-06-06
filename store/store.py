@@ -214,8 +214,11 @@ def get_average_by_manufacturer(table, manufacturer):
             games_instock += int(i[4])
             games_count += 1
 
-    avg_by_manufacturer = games_instock / games_count
+    if games_count != 0:
+        result = games_instock / games_count
+    else:
+        result = 0
 
     label = 'Average amount of games by {} in stock'.format(manufacturer)
 
-    return avg_by_manufacturer, label
+    return result, label
