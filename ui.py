@@ -113,9 +113,9 @@ def print_result(result, label):
         This function doesn't return anything it only prints to console.
     """
 
-    # your code
-
-    pass
+    print('{}:'.format(label))
+    print(result)
+    print('')
 
 
 def print_menu(title, list_options, exit_message):

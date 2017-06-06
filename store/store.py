@@ -56,7 +56,12 @@ def start_module():
             update(table, id_)
             data_manager.write_table_to_file(file_path, table)
         elif option == '5':
-            get_counts_by_manufacturers(table)
+            result, label = get_counts_by_manufacturers(table)
+            ui.print_result(result, label)
+        elif option == '6':
+            manufacturer = ui.get_inputs([''], 'Type manufacturer\'s name to show it\'s average amount of games in stock')
+            result, label = get_average_by_manufacturer(table, manufacturer[0])
+            ui.print_result(result, label)
         elif option == '0':
             break
         else:
@@ -182,6 +187,7 @@ def get_counts_by_manufacturers(table):
     Returns:
         dictionary with manufacturer as a key (str) and games number as a value (int)
         (e.g. {'Blizzard Entertainment' : 3})
+        label of a result
     """
     counts_by_manufacturers = {}
 
@@ -191,13 +197,28 @@ def get_counts_by_manufacturers(table):
         elif i[2] in counts_by_manufacturers:
             counts_by_manufacturers[i[2]] += 1
 
-    return counts_by_manufacturers
+    label = 'Dictionary of total amount of games by manufacturer'
+
+    return counts_by_manufacturers, label
 
 
 # the question: What is the average amount of games in stock of a given manufacturer?
 # return type: number
 def get_average_by_manufacturer(table, manufacturer):
 
-    # your code
+    games_instock = 0
+    games_count = 0
 
-    pass
+    for i in table:
+        if i[2] == manufacturer:
+            games_instock += int(i[4])
+            games_count += 1
+
+    if games_count != 0:
+        result = games_instock / games_count
+    else:
+        result = 0
+
+    label = 'Average amount of games by {} in stock'.format(manufacturer)
+
+    return result, label
