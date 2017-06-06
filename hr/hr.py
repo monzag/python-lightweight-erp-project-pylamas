@@ -29,18 +29,24 @@ def start_module():
 
     list_options = ["Show list of employees.",
                     "Add new employee.",
-                    "Update record by id"
+                    "Remove record by id",
                     "Update info about employee."]
 
     ui.print_menu("Human Resources", list_options, exit_message)
     user_choice = ui.get_inputs(["Menu number: "], "Select action by menu number")
 
     if user_choice[0] == "1":
-        table = get_file_path()
+        table = get_file_and_print()
         show_table(table)
     elif user_choice[0] == "2":
-        table = get_file_path()
-        add(table)
+        table = get_file_and_print()
+        table = add(table)
+
+    elif user_choice[0] == "3":
+        table = get_file_and_print()
+        id_ = ui.get_inputs(["Id: "], "Type id of record to remove")
+        table = remove(table, id_)
+        show_table(table)
 
 
 def show_table(table):
@@ -93,7 +99,9 @@ def remove(table, id_):
         Table without specified record.
     """
 
-    # your code
+    record = common.find_id(table, id_[0])
+    table = common.remove_record(table, record)
+
 
     return table
 
@@ -115,7 +123,7 @@ def update(table, id_):
     return table
 
 
-def get_file_path():
+def get_file_and_print():
     """
     Gets the file path and read the .csv file
 
@@ -126,7 +134,7 @@ def get_file_path():
     full_path = os.getcwd()
     file_name = full_path + "/hr/persons.csv"
     table = data_manager.get_table_from_file(file_name)
-
+    show_table(table)
     return table
 
 
