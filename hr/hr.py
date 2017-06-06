@@ -29,7 +29,11 @@ def start_module():
 
     list_options = ["Show list of employees.",
                     "Add new employee.",
+
                     "Remove ann employee by id.",
+
+                    "Remove ann employee by id."
+
                     "Update info about employee."]
 
     ui.print_menu("Human Resources", list_options, exit_message)
@@ -41,9 +45,6 @@ def start_module():
     elif user_choice[0] == "2":
         table = get_file_path()
         add(table)
-
-
-
 
 
 def show_table(table):
