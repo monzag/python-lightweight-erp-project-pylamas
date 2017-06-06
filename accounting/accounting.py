@@ -47,7 +47,13 @@ def start_module():
         if menu == '2':
             add(table)
         if menu == '3':
-            remove(table, id_)
+            show_table(table)
+            id_ = ui.get_inputs([''], 'Type id of record')[0]
+            ids = common.get_value_from(table, 0)
+            if id_ in ids:
+                table = remove(table, id_)
+            else:
+                ui.print_error_message('There is no record with this id')
         if menu == '4':
             update(table, id_)
         if menu == '0':
@@ -88,11 +94,11 @@ def add(table):
     Returns:
         Table with a new record
     """
-    list_lables = ['month(mm)', 'day(dd)', 'year(yyyy)', 'type(in/out)', 'amount($)']
-    new_record = ui.get_inputs(list_lables, 'Archive new accounting')
+    list_labels = ['month(mm)', 'day(dd)', 'year(yyyy)', 'type(in/out)', 'amount($)']
+    new_record = ui.get_inputs(list_labels, 'Archive new accounting')
 
     if is_record_valid(new_record):
-        ids = [each[0] for each in table]
+        ids = common.get_value_from(table, 0)
         id_ = common.generate_random(ids)
         new_record.insert(0, id_)
         table.append(new_record)
@@ -113,14 +119,14 @@ def is_record_valid(record):
         boolean
     """
     [month, day, year, in_out, amount] = record
-    return is_date_valid(month, day, year) and is_value_vaild(in_out, amount)
+    return is_date_valid(month, day, year) and is_value_valid(in_out, amount)
 
 
 def is_date_valid(month, day, year):
     return common.is_month_valid(month) and common.is_day_valid(day) and common.is_year_valid(year)
 
 
-def is_value_vaild(in_out, amount):
+def is_value_valid(in_out, amount):
     return in_out in ['in', 'out'] and common.is_money_valid(amount)
 
 
@@ -135,9 +141,8 @@ def remove(table, id_):
     Returns:
         Table without specified record.
     """
-
-    # your code
-
+    record = common.find_id(table, id_)
+    table = common.remove_record(table, record)
     return table
 
 

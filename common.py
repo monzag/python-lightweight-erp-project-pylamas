@@ -142,3 +142,20 @@ def is_money_valid(money):
         return True
     return False
 
+
+def get_value_from(table, index):
+    '''creates list of values from exact index
+
+    Parameters:
+        table - list of lists
+        index - int corresponding to value in table
+
+    Returns:
+        values - list of vale
+    '''
+
+    values = [record[index] for record in table]
+
+    return values
+
+
