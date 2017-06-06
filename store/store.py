@@ -55,6 +55,8 @@ def start_module():
         elif option == '4':
             update(table, id_)
             data_manager.write_table_to_file(file_path, table)
+        elif option == '5':
+            get_counts_by_manufacturers(table)
         elif option == '0':
             break
         else:
@@ -171,12 +173,25 @@ def update(table, id_):
 # the question: How many different kinds of game are available of each manufacturer?
 # return type: a dictionary with this structure: { [manufacturer] : [count] }
 def get_counts_by_manufacturers(table):
+    """
+    Counts the number of games by each manufacturer.
 
-    games_by_manufacturers = {}
+    Args:
+        table: list of lists containing details of each game
 
-    
+    Returns:
+        dictionary with manufacturer as a key (str) and games number as a value (int)
+        (e.g. {'Blizzard Entertainment' : 3})
+    """
+    counts_by_manufacturers = {}
 
-    pass
+    for i in table:
+        if i[2] not in counts_by_manufacturers:
+            counts_by_manufacturers[i[2]] = 1
+        elif i[2] in counts_by_manufacturers:
+            counts_by_manufacturers[i[2]] += 1
+
+    return counts_by_manufacturers
 
 
 # the question: What is the average amount of games in stock of a given manufacturer?
