@@ -27,7 +27,8 @@ def start_module():
     Returns:
         None
     """
-    table = get_archive()
+    file_path = os.getcwd() + '/accounting/items.csv'
+    table = get_archive(file_path)
 
     title = 'Accounting archive'
     list_options = ['Show archived incomes/outcomes',
@@ -55,8 +56,7 @@ def start_module():
             ui.print_error_message('Invalid input')
 
 
-def get_archive():
-    file_path = os.getcwd() + '/accounting/items.csv'
+def get_archive(file_path):
     if os.path.exists(file_path):
         table = data_manager.get_table_from_file(file_path)
     else:
@@ -74,16 +74,9 @@ def show_table(table):
     Returns:
         None
     """
-    
     title_list = ['id', 'month', 'day', 'year', 'type', 'amount']
-    
     ui.print_table(table, title_list)
-    '''
-    print('Archived accountings: ')
-    print('\n'.join(' : '.join(element) for element in table))
-    '''
-    
-    
+ 
 
 def add(table):
     """
@@ -99,12 +92,10 @@ def add(table):
     new_record = ui.get_inputs(list_lables, 'Archive new accounting')
 
     if is_record_valid(new_record):
-        # ids = [each[0] for each in table]
-        # id_ = common.generate_random(ids)
-        id_ = '##12kkRR'
+        ids = [each[0] for each in table]
+        id_ = common.generate_random(ids)
         new_record.insert(0, id_)
         table.append(new_record)
-        ui.print_error_message('Sucesfully added new record to archive')
     else:
         ui.print_error_message('Invalid input format.\nYour record will not be added to archive.')
 
@@ -122,10 +113,15 @@ def is_record_valid(record):
         boolean
     """
     [month, day, year, in_out, amount] = record
+    return is_date_valid(month, day, year) and is_value_vaild(in_out, amount)
 
-    if common.is_month_valid(month) and common.is_day_valid(day) and common.is_year_valid(year) and in_out.lower() in ['in', 'out'] and common.is_money_valid(amount):
-        return True
-    return False
+
+def is_date_valid(month, day, year):
+    return common.is_month_valid(month) and common.is_day_valid(day) and common.is_year_valid(year)
+
+
+def is_value_vaild(in_out, amount):
+    return in_out in ['in', 'out'] and common.is_money_valid(amount)
 
 
 def remove(table, id_):
