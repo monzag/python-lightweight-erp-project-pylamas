@@ -148,11 +148,11 @@ def item_to_change():
     inputs = ui.get_inputs([''], 'Choose option')
     option = int(inputs[0])
 
-    if option in range(len(list_options) + 1):
+    '''if option in range(len(list_options) + 1):
         return option
 
-    else:
-        return 'Bad number'
+    else:'''
+    return option
 
 
 def update(table, id_):
@@ -169,9 +169,10 @@ def update(table, id_):
 
     record = common.find_id(table, id_)
     option = item_to_change()
-    new_data = ui.get_inputs([''], 'Please write new data')
-    new_data = new_data[0]
-    common.insert_new_data(record, new_data, option)
+    if option in range(1, 4):
+        new_data = ui.get_inputs([''], 'Please write new data')
+        new_data = new_data[0]
+        common.insert_new_data(record, new_data, option)
 
     return table
 
