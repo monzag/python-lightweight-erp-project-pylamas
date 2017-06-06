@@ -47,6 +47,7 @@ def generate_random(table):
         for item in table:
             if item == generated:
                 count = 0
+                generated = ''
 
     return generated
 
@@ -56,9 +57,8 @@ def find_id(table, id_):
     Use in remove() and update()'''
 
     for record in table:
-        for item in record:
-            if item == id_:
-                return record
+        if record[0] == id_:
+            return record
 
 
 def remove_record(table, record):
@@ -71,11 +71,11 @@ def remove_record(table, record):
     return table
 
 
-def insert_new_data(record, new_data, position):
+def insert_new_data(record, new_data, option):
     '''Replace old data with new_data on proper position in record (list of lists). 
     Return record. Use in update()'''
 
-    record[position] = new_data
+    record[option] = new_data
     return record
 
 
