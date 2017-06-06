@@ -25,10 +25,47 @@ def start_module():
     Returns:
         None
     """
+    file_path = os.getcwd() + '/store/games.csv'
+    table = get_archive(file_path)
 
-    # your code
+    title = "Store Manager"
+    list_options = ["Show list of games",
+               "Add new game",
+               "Remove a game by id",
+               "Update a game by id",
+               "Show amount of games by manufacturer",
+               "Show average amount of games by manufacturer"]
+    exit_message = "Back to main menu"
 
-    pass
+    option = None
+    while option != '0':
+        ui.print_menu(title, list_options, exit_message)
+        inputs = ui.get_inputs([''], 'Choose action to perform')
+        option = inputs[0]
+
+        if option == '1':
+            show_table(table)
+        elif option == '2':
+            add(table)
+            data_manager.write_table_to_file(file_path, table)
+        elif option == '3':
+            remove(table, id_)
+            data_manager.write_table_to_file(file_path, table)
+        elif option == '4':
+            update(table, id_)
+            data_manager.write_table_to_file(file_path, table)
+        elif option == '0':
+            break
+        else:
+            ui.print_error_message('Invalid input')
+
+
+def get_archive(file_path):
+    if os.path.exists(file_path):
+        table = data_manager.get_table_from_file(file_path)
+    else:
+        table = []
+    return table
 
 
 def show_table(table):
@@ -42,9 +79,8 @@ def show_table(table):
         None
     """
 
-    # your code
-
-    pass
+    title_list = ['ID', 'Title', 'Manufacturer', 'Price', 'In stock']
+    ui.print_table(table, title_list)
 
 
 def add(table):
@@ -58,7 +94,18 @@ def add(table):
         Table with a new record
     """
 
-    # your code
+    list_labels = ['Title', 'Manufacturer', 'Price($)', 'Items in stock']
+    new_record = ui.get_inputs(list_labels, 'Add new game')
+
+    id_ = common.generate_random(table)
+    money = new_record[2]
+    instock = new_record[3]
+
+    if common.is_money_valid(money) == True and instock.isdigit():
+        new_record.insert(0, id_)
+        table.append(new_record)
+    else:
+        ui.print_error_message("Wrong number format! Record add failed!")
 
     return table
 
@@ -75,7 +122,8 @@ def remove(table, id_):
         Table without specified record.
     """
 
-    # your code
+    record = common.find_id(table, id_)
+    common.remove_record(table, record)
 
     return table
 
@@ -92,7 +140,10 @@ def update(table, id_):
         table with updated record
     """
 
-    # your code
+    position = 1
+    new_data = 'new_name'
+    record = common.find_id(table, id_)
+    common.insert_new_data(record, new_data, position)
 
     return table
 

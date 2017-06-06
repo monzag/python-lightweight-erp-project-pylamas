@@ -26,9 +26,36 @@ def start_module():
         None
     """
 
-    # your code
+    file_path = os.getcwd() + '/crm/customers.csv'
+    table = get_archive(file_path)
 
-    pass
+    title = 'Customer relationship management'
+    list_options = ['Show subscribers',
+                    'Add subscriber',
+                    'Remove subscriber',
+                    'Update data of subscriber']
+    exit_message = 'Back to main menu'
+
+    menu = None
+    while menu != '0':
+        ui.print_menu(title, list_options, exit_message)
+        inputs = ui.get_inputs([''], 'Choose action to perform')
+        menu = inputs[0]
+
+        if menu == '1':
+            show_table(table)
+        elif menu == '2':
+            add(table)
+        elif menu == '3':
+            id_ = 'iN7hQ7$&'
+            remove(table, id_)
+        elif menu == '4':
+            id_ = 'bH34Jx#&'
+            update(table, id_)
+        elif menu == '0':
+            data_manager.write_table_to_file(file_path, table)
+        else:
+            ui.print_error_message('Invalid input')
 
 
 def show_table(table):
@@ -42,9 +69,17 @@ def show_table(table):
         None
     """
 
-    # your code
+    title_list = ['id', 'name', 'e-mail', 'newsletter(y/n)']
+    ui.print_table(table, title_list)
 
-    pass
+
+def get_archive(file_path):
+    if os.path.exists(file_path):
+        table = data_manager.get_table_from_file(file_path)
+    else:
+        table = []
+
+    return table
 
 
 def add(table):
@@ -58,9 +93,24 @@ def add(table):
         Table with a new record
     """
 
-    # your code
+    list_lables = ['name: ', 'e-mail: ', 'newsletter(y/n): ']
+    new_record = ui.get_inputs(list_lables, 'Please provide information about subscriber')
+
+    if is_email_valid(new_record[1]):
+        id_ = common.generate_random(table)
+        new_record.insert(0, id_)
+        table.append(new_record)
+    else:
+        ui.print_error_message('Invalid input format.\nYour record will not be added.')
 
     return table
+
+
+def is_email_valid(email):
+    if '@' in email:
+        return True
+    else:
+        return False
 
 
 def remove(table, id_):
@@ -73,9 +123,10 @@ def remove(table, id_):
 
     Returns:
         Table without specified record.
-    """
+    """ 
 
-    # your code
+    record = common.find_id(table, id_)
+    common.remove_record(table, record)
 
     return table
 
@@ -91,8 +142,11 @@ def update(table, id_):
     Returns:
         table with updated record
     """
-
-    # your code
+    # user can choose what he want to change? Ex. name in position 1
+    position = 1
+    new_data = 'new_name'
+    record = common.find_id(table, id_)
+    common.insert_new_data(record, new_data, position)
 
     return table
 
