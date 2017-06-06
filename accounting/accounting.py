@@ -27,10 +27,41 @@ def start_module():
     Returns:
         None
     """
+    table = get_archive()
 
-    # you code
+    title = 'Accounting archive'
+    list_options = ['Show archived incomes/outcomes',
+                    'Add to archive  income/outcome',
+                    'Remove existing income/outcome',
+                    'Update existing income/outcome']
+    exit_message = 'Back to main menu'
+    
+    menu = None
+    while menu != '0':
+        ui.print_menu(title, list_options, exit_message)
+        menu = ui.get_inputs([''], 'Choose action to perform')[0]
+        
+        if menu == '1':
+            show_table(table)
+        if menu == '2':
+            add(table)
+        if menu == '3':
+            remove(table, id_)
+        if menu == '4':
+            update(table, id_)
+        if menu == '0':
+            data_manager.write_table_to_file(file_path, table)
+        else:
+            ui.print_error_message('Invalid input')
 
-    pass
+
+def get_archive():
+    file_path = os.getcwd() + '/accounting/items.csv'
+    if os.path.exists(file_path):
+        table = data_manager.get_table_from_file(file_path)
+    else:
+        table = []
+    return table
 
 
 def show_table(table):
@@ -43,11 +74,16 @@ def show_table(table):
     Returns:
         None
     """
-
-    # your code
-
-    pass
-
+    
+    title_list = ['id', 'month', 'day', 'year', 'type', 'amount']
+    
+    ui.print_table(table, title_list)
+    '''
+    print('Archived accountings: ')
+    print('\n'.join(' : '.join(element) for element in table))
+    '''
+    
+    
 
 def add(table):
     """
@@ -59,10 +95,37 @@ def add(table):
     Returns:
         Table with a new record
     """
+    list_lables = ['month(mm)', 'day(dd)', 'year(yyyy)', 'type(in/out)', 'amount($)']
+    new_record = ui.get_inputs(list_lables, 'Archive new accounting')
 
-    # your code
+    if is_record_valid(new_record):
+        # ids = [each[0] for each in table]
+        # id_ = common.generate_random(ids)
+        id_ = '##12kkRR'
+        new_record.insert(0, id_)
+        table.append(new_record)
+        ui.print_error_message('Sucesfully added new record to archive')
+    else:
+        ui.print_error_message('Invalid input format.\nYour record will not be added to archive.')
 
     return table
+
+
+def is_record_valid(record):
+    """
+    unpacks provided list into ordered values and checks if input from user was proper
+
+    Parameters:
+        record - list of values
+    
+    Returns:if len(str(title_list[item_index])) > len(longest_string):
+        boolean
+    """
+    [month, day, year, in_out, amount] = record
+
+    if common.is_month_valid(month) and common.is_day_valid(day) and common.is_year_valid(year) and in_out.lower() in ['in', 'out'] and common.is_money_valid(amount):
+        return True
+    return False
 
 
 def remove(table, id_):

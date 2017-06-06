@@ -1,6 +1,6 @@
 # data structure:
 # id: string
-#     Unique and random generated (at least 2 special char()expect: ';'), 2 number, 2 lower and 2 upper case letter)
+#   Unique and random generated (at least 2 special char()expect: ';'), 2 number, 2 lower and 2 upper case letter)
 # name: string
 # birth_date: number (year)
 
@@ -25,9 +25,25 @@ def start_module():
         None
     """
 
-    # your code
+    exit_message = "5.Back to main menu."
 
-    pass
+    list_options = ["1.Show list of employees.",
+                    "2.Add new employee.",
+                    "3.Remove ann employee by id."
+                    "4.Update info about employee."]
+
+    ui.print_menu("Human Resources", list_options, exit_message)
+    user_choice = ui.get_inputs(["Menu number: "], "Select action by menu number")
+
+    if user_choice[0] == "1":
+        table = get_file_path()
+        show_table(table)
+    elif user_choice[0] == "2":
+        table = get_file_path()
+        add(table)
+
+
+
 
 
 def show_table(table):
@@ -40,10 +56,8 @@ def show_table(table):
     Returns:
         None
     """
-
-    # your code
-
-    pass
+    title_list = ["id", "Name and Surname", "Year of birth"]
+    ui.print_table(table, title_list)
 
 
 def add(table):
@@ -56,8 +70,16 @@ def add(table):
     Returns:
         Table with a new record
     """
+    list_labels = ["Name and Surname: ", "Year of birth(yyyy): "]
+    data_input = ui.get_inputs(list_labels, "Add new record")
+    id_ = common.generate_random(table)
+    is_date_number = data_input[1].isdigit()
 
-    # your code
+    if is_date_number is True:
+        data_input.insert(0, id_)
+        table.append(data_input)
+    else:
+        ui.print_error_message("Wrong year format! Record add failed!")
 
     return table
 
@@ -96,6 +118,21 @@ def update(table, id_):
     return table
 
 
+def get_file_path():
+    """
+    Gets the file path and read the .csv file
+
+    Returns:
+            table
+    """
+
+    full_path = os.getcwd()
+    file_name = full_path + "/persons.csv"
+    table = data_manager.get_table_from_file(file_name)
+
+    return table
+
+
 # special functions:
 # ------------------
 
@@ -115,3 +152,4 @@ def get_persons_closest_to_average(table):
     # your code
 
     pass
+start_module()
