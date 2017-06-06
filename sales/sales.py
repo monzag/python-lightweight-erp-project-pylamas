@@ -53,7 +53,7 @@ def get_data_from_file(file_path):
 
 def menu_control(table):
     """
-    Main loop of module
+    Main loop of module sales
     """
     title = 'Sales archive'
     list_options = ['Show archived sales',
@@ -94,13 +94,7 @@ def show_table(table):
 
 
 def add(table):
-    """updated_record = get_record_from_user()
-        if is_record_vaild(updated_record):
-            for index, record in enumerate(table):
-                if record[0] == id_:
-                    table[index] = record[:1] + updated_record
-        else:
-            ui.print_error_message('Invalid input format')
+    """
     Asks user for input and adds it into the table.
 
     Args:
@@ -147,6 +141,12 @@ def is_date_vaild(day, month, year):
 
 
 def remove_record_from_data(table):
+    """
+    removes record from data if possible
+
+    Returns:
+        table - list of lists (updated)
+    """
     show_table(table)
     id_ = ui.get_inputs([''], 'Type id of record to be removed')[0]
     ids = [record[0] for record in table]
@@ -175,6 +175,12 @@ def remove(table, id_):
 
 
 def update_record_in_data(table):
+    """
+    updates record in data only if possible
+
+    Returns:
+        table - list of lists (updated)
+    """
     show_table(table)
     id_ = ui.get_inputs([''], 'Type id of record to be changed')[0]
     ids = [record[0] for record in table]
