@@ -27,10 +27,56 @@ def start_module():
     Returns:
         None
     """
-
-    # your code
-
+    file_path = os.getcwd() + '/sales/sales.csv'
+    table = get_data_from_file(file_path)
+    table = menu_control(table)
+    save_data_to_file()
     pass
+
+
+def get_data_from_file(file_path):
+    """
+    Create data for accounting based on csv file if exists
+    if not returns empty list
+
+    Parameters:
+        file_path - string with file path
+    Returns:
+        table - list of lists corresponding to data model
+    """
+    if os.path.exists(file_path):
+        table = data_manager.get_table_from_file(file_path)
+    else:
+        table = []
+    return table
+
+
+def menu_control(table):
+    """
+    Main loop of module
+    """
+    title = 'Sales archive'
+    list_options = ['Show archived sales',
+                    'Add new sale',
+                    'Remove existing sale',
+                    'Update existing sale']
+    exit_message = 'Back to main menu'
+
+    menu = None
+    while menu != 0:
+        ui.print_menu(title, list_options, exit_message)
+        menu = ui.get_inputs([''], 'Choose action to perform')[0]
+        
+        if menu == '1':
+            show_table(table)
+        elif menu == '2':
+            table = add(table)
+        elif menu == '3':
+            table = remove_record_from_data(table)
+        elif menu == '4':
+            table = update_record_in_data(table)
+
+    return table
 
 
 def show_table(table):
@@ -43,14 +89,18 @@ def show_table(table):
     Returns:
         None
     """
-
-    # your code
-
-    pass
+    title_list = ['id', 'title', 'price', 'day', 'year', 'month']
+    ui.print_table(table, title_list)
 
 
 def add(table):
-    """
+    """updated_record = get_record_from_user()
+        if is_record_vaild(updated_record):
+            for index, record in enumerate(table):
+                if record[0] == id_:
+                    table[index] = record[:1] + updated_record
+        else:
+            ui.print_error_message('Invalid input format')
     Asks user for input and adds it into the table.
 
     Args:
@@ -59,9 +109,51 @@ def add(table):
     Returns:
         Table with a new record
     """
+    new_record = get_record_from_user()
+    if is_record_vaild(new_record):
+        id_ = common.generate_random(table)
+        new_record.insert(0, id_)
+        table.append(new_record)
+    else:
+        ui.print_error_message('Invalid input format')
+    return table
 
-    # your code
 
+def get_record_from_user():
+    """
+    Creates record based on user input
+
+    Returns:
+        new_record - list with 5 elements
+    """
+    list_labels = ['title', 'price($)', 'day(dd)', 'year(yyyy)', 'month(mm)']
+    new_record = ui.get_inputs(list_labels, 'Archive new sale')
+    return new_record
+
+
+def is_record_vaild(record):
+    """
+    returns True if user input was of valid format
+    """
+    [title, price, day, year, month] = record
+    return common.is_money_valid(price) and is_date_vaild(day, month, year)
+
+
+def is_date_vaild(day, month, year):
+    """
+    returns True if date input was valid
+    """
+    return common.is_day_valid(day) and common.is_month_valid(month) and common.is_year_valid(year)
+
+
+def remove_record_from_data(table):
+    show_table(table)
+    id_ = ui.get_inputs([''], 'Type id of record to be removed')[0]
+    ids = [record[0] for record in table]
+    if id_ in ids:
+        table = remove(table, id_)
+    else:
+        ui.print_error_message('Invalid id input')
     return table
 
 
@@ -76,9 +168,20 @@ def remove(table, id_):
     Returns:
         Table without specified record.
     """
+    for index, record in enumerate(table):
+        if record[0] == id_:
+            table.pop(index)
+    return table
 
-    # your code
 
+def update_record_in_data(table):
+    show_table(table)
+    id_ = ui.get_inputs([''], 'Type id of record to be changed')[0]
+    ids = [record[0] for record in table]
+    if id_ in ids:
+        table = update(table, id_)
+    else:
+        ui.print_error_message('Invalid id input')
     return table
 
 
@@ -93,9 +196,13 @@ def update(table, id_):
     Returns:
         table with updated record
     """
-
-    # your code
-
+    updated_record = get_record_from_user()
+    if is_record_vaild(updated_record):
+        for index, record in enumerate(table):
+            if record[0] == id_:
+                table[index] = record[:1] + updated_record
+    else:
+        ui.print_error_message('Invalid input format')
     return table
 
 
