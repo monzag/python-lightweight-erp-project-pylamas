@@ -75,10 +75,6 @@ def remove(table, id_):
         Table without specified record.
     """
 
-    # your code
-
-    return table
-
 
 def update(table, id_):
     """
