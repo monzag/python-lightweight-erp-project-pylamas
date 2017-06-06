@@ -81,7 +81,6 @@ def add(table):
     else:
         ui.print_error_message("Wrong year format! Record add failed!")
 
-    print(table)    
     return table
 
 
