@@ -25,12 +25,12 @@ def start_module():
         None
     """
 
-    exit_message = "5.Back to main menu."
+    exit_message = "Back to main menu."
 
-    list_options = ["1.Show list of employees.",
-                    "2.Add new employee.",
-                    "3.Remove ann employee by id."
-                    "4.Update info about employee."]
+    list_options = ["Show list of employees.",
+                    "Add new employee.",
+                    "Remove ann employee by id."
+                    "Update info about employee."]
 
     ui.print_menu("Human Resources", list_options, exit_message)
     user_choice = ui.get_inputs(["Menu number: "], "Select action by menu number")
@@ -41,9 +41,6 @@ def start_module():
     elif user_choice[0] == "2":
         table = get_file_path()
         add(table)
-
-
-
 
 
 def show_table(table):
