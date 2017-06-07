@@ -33,7 +33,9 @@ def start_module():
     list_options = ['Show subscribers',
                     'Add subscriber',
                     'Remove subscriber',
-                    'Update data of subscriber']
+                    'Update data of subscriber',
+                    'Get the longest name',
+                    'Get subscribed e-mail']
     exit_message = 'Back to main menu'
 
     menu = True
@@ -43,19 +45,31 @@ def start_module():
 
         if menu == '1':
             show_table(table)
+
         elif menu == '2':
             add(table)
+
         elif menu == '3':
             id_ = ui.get_inputs([''], 'Write id: ')
             table = remove(table, id_)
             show_table(table)
+
         elif menu == '4':
             id_ = ui.get_inputs([''], 'Write id: ')
             id_ = id_[0]
             update(table, id_)
 
+        elif menu == '5':
+            id_longest_name = get_longest_name_id(table)
+            ui.print_result(id_longest_name, 'Id of the longest name')
+
+        elif menu == '6':
+            person_newsletter = get_subscribed_emails(table)
+            ui.print_result(person_newsletter, 'List of subsribers')
+
         elif menu == '0':
             data_manager.write_table_to_file(file_path, table)
+
         else:
             ui.print_error_message('Invalid input')
 
@@ -113,8 +127,15 @@ def add(table):
 
 
 def is_email_valid(email):
-    '''Check that @ occur in email
-    If not: false'''
+    '''
+    Check that @ occur in email
+
+    Args:
+        email - element 2 from record in table
+
+    Return
+        True if occur, else: False
+    '''
 
     if '@' in email:
         return True
@@ -123,8 +144,15 @@ def is_email_valid(email):
 
 
 def is_newsletter_valid(newsletter):
-    '''Check that user write 1 or 0.
-    If something else: False'''
+    '''
+    Check that user write correct number: 1 or 0.
+
+    Args:
+        newsletter - element 3 from record in table
+
+    Returns:
+        True if proper format, else: False
+    '''
 
     if newsletter == '1' or newsletter == '0':
         return True
@@ -150,10 +178,13 @@ def remove(table, id_):
     return table
 
 
-def item_to_change():
-    '''Open menu with options, user choose which element should be change.
-    Index this element in list is 'options'
-    Use in update'''
+def data_to_change():
+    '''
+    Display menu with options, user choose which element should be change.
+
+    Returns:
+        option - users input(number). It means index of element in table.
+    '''
 
     title = 'What do you want to change? '
     list_options = ['name ',
@@ -180,7 +211,7 @@ def update(table, id_):
     """
 
     record = common.find_id(table, id_)
-    option = item_to_change()
+    option = data_to_change()
 
     # range of options
     first_option = 1
@@ -199,23 +230,59 @@ def update(table, id_):
     return table
 
 
-# special functions:
-# ------------------
-
-
-# the question: What is the id of the customer with the longest name ?
-# return type: string (id) - if there are more than one longest name, return the first by descending alphabetical order
 def get_longest_name_id(table):
+    '''
+    Compare length of names in the table and get id the longest name. 
+    If there are more than one longest name, return the first by 'asscending' alphabetical order
 
-    # your code
+    Args:
+        table - list in lists where is find element with index 1 (name)
 
-    pass
+    Returns:
+        Id of longest name
+
+    '''
+    longest_name = ''
+    id_longest_name = ''
+    index_name = 1
+    index_id = 0
+
+    for row in table:
+        name = row[index_name].lower()
+        id_ = row[index_id]
+
+        if len(name) > len(longest_name):
+            longest_name = name
+            id_longest_name = id_
+
+        elif len(name) == len(longest_name):
+            for letter in name:
+                for letter_2 in longest_name:
+                    if letter < letter_2:
+                        longest_name = name
+                        id_longest_name = id_
+
+    return id_longest_name
 
 
-# the question: Which customers has subscribed to the newsletter?
-# return type: list of strings (where string is like email+separator+name, separator=";")
 def get_subscribed_emails(table):
+    '''
+    Create new list with customers subscribed to the newsletter.
 
-    # your code
+    Args:
+        table: list of lists with specific items
 
-    pass
+    Returns:
+        person_with_newsletter - list of string 'email;name'
+    '''
+    index_name = 1
+    index_email = 2
+    index_newsletter = 3
+    person_with_newsletter = []
+
+    for row in table:
+        if row[index_newsletter] == '1':
+            record = row[index_email] + ";" + row[index_name]
+            person_with_newsletter.append(record)
+
+    return person_with_newsletter
