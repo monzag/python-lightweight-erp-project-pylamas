@@ -6,6 +6,7 @@
 # year: number
 # type: string (in = income, out = outcome)
 # amount: number (dollar)
+# [id, month, day, year, type, amount]
 
 
 # importing everything you need
@@ -28,8 +29,8 @@ def start_module():
         None
     """
     table = get_data_from_file()
+    which_year_max(table)
     table = menu_control(table)
-    save_data_to_file(table)
 
 
 def get_data_from_file():
@@ -126,6 +127,7 @@ def add(table):
         id_ = common.generate_random(table)
         new_record.insert(0, id_)
         table.append(new_record)
+        save_data_to_file(table)
     else:
         ui.print_error_message('Invalid input format.\nYour record will not be added to archive.')
 
@@ -221,6 +223,7 @@ def remove(table, id_):
     for index, record in enumerate(table):
         if record[0] == id_: # where record[0] is id
             table.pop(index)
+        save_data_to_file(table)
     return table
 
 
@@ -262,6 +265,7 @@ def update(table, id_):
         for index, record in enumerate(table):
             if record[0] == id_:
                 table[index] = record[:1] + updated_record
+        save_data_to_file(table)
     else:
         ui.print_error_message('Invalid input format')
     return table
@@ -269,20 +273,75 @@ def update(table, id_):
 
 # special functions:
 # ------------------
+def get_profit_for_each_year(table):
+    """
+    Searches table for different years and calculates profit,
+    and amount of transactions for each year independetly
+
+    Parameters:
+        table - list of lists
+
+    Returns:
+        profit - [[year, profit, item_count], [year2, profit2, item_count]...]
+    """
+    profit = []
+    for record in table:
+        # if year is not in profit yet
+        if record[-3] not in [year[0] for year in profit]:
+            # add new formated element to profit list
+            profit.append([record[-3], 0, 0])
+        if record[-2] == 'in':
+            for year in profit:
+                if year[0] == record[-3]:
+                    year[1] += int(record[-1])
+                    year[2] += 1
+        if record[-2] == 'out':
+            for year in profit:
+                if year[0] == record[-3]:
+                    year[1] -= int(record[-1])
+                    year[2] += 1
+
+    return profit
+
 
 # the question: Which year has the highest profit? (profit=in-out)
 # return the answer (number)
 def which_year_max(table):
+    """
+    Searches each year profits for year with highest income
 
-    # your code
+    Parameters:
+        table - list of lists
+    
+    Returns
+        int - representing year
+    """
+    # [id, month, day, year, type, amount]
+    profit = get_profit_for_each_year(table)
+    year_max = profit[0]
+    for year_data in profit:
+        if year_data[1] > year_max[1]:
+            year_max = year_data
 
-    pass
+    return int(year_max[0])
 
 
 # the question: What is the average (per item) profit in a given year? [(profit)/(items count) ]
 # return the answer (number)
 def avg_amount(table, year):
+    """
+    Calculates average income for choosen year
 
-    # your code
-
-    pass
+    Parameters:
+        table - list of lists
+        year -  int for which average should be returned
+    
+    Returns:
+        average - int
+    """
+    profit = get_profit_for_each_year(table)
+    average = None
+    for year_data in profit:
+        if int(year_data[0]) == year:
+            average = year_data[1]/year_data[2]
+    return average
