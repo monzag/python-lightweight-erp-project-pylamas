@@ -37,7 +37,20 @@ def print_table(table, title_list):
 
 
 def create_data_row(table, list_index, title_list, MIN_COLUMN_WIDTH, CELL_PADDING, is_title=False):
+    '''
+    Generates a string to be later printed as an row with data in a table.
 
+    Args:
+        table: list of lists of all the strings
+        list_index: int (index of a specific list in a table)
+        title_list: list of titles of columns that will be printed in a complete table
+        MIN_COLUMN_WIDTH: int
+        CELL_PADDING: int
+        is_title: boolean (if True, creates title row, if False, creates data row)
+
+    Returns:
+        data_row: string ready to be printed
+    '''
     data_row = '|'
 
     for i in range(len(table[list_index])):
@@ -56,7 +69,19 @@ def create_data_row(table, list_index, title_list, MIN_COLUMN_WIDTH, CELL_PADDIN
 
 
 def create_middle_row(table, columns_number, title_list, MIN_COLUMN_WIDTH, CELL_PADDING):
+    '''
+    Generates a string to be later printed as a middle row in a table.
 
+    Args:
+        table: list of lists of all the strings
+        columns_number: int
+        title_list: list of titles of columns that will be printed in a complete table
+        MIN_COLUMN_WIDTH: int
+        CELL_PADDING: int
+
+    Returns:
+        middle_row: string ready to be printed
+    '''
     middle_row = '|'
 
     for i in range(columns_number):
@@ -70,7 +95,19 @@ def create_middle_row(table, columns_number, title_list, MIN_COLUMN_WIDTH, CELL_
 
 
 def create_outer_row(table, columns_number, title_list, MIN_COLUMN_WIDTH, CELL_PADDING):
+    '''
+    Generates a string to be later printed as an outer row in a table.
 
+    Args:
+        table: list of lists of all the strings
+        columns_number: int
+        title_list: list of titles of columns that will be printed in a complete table
+        MIN_COLUMN_WIDTH: int
+        CELL_PADDING: int
+
+    Returns:
+        outer_row: string ready to be printed
+    '''
     outer_row = ''
 
     for i in range(columns_number):
@@ -87,6 +124,17 @@ def create_outer_row(table, columns_number, title_list, MIN_COLUMN_WIDTH, CELL_P
 
 
 def find_max_string_length(table, item_index, title_list):
+    '''
+    Finds longest string from all items with a specific index that will be printed in one column
+
+    Args:
+        table: list of lists of all the strings
+        item_index: int (specific index in lists in table)
+        title_list: list of titles of columns that will be printed in a complete table
+
+    Returns:
+        int (longest length value for a given index)
+    '''
     longest_string = ''
 
     for a_list in table:
@@ -146,6 +194,7 @@ def print_menu(title, list_options, exit_message):
         print('    ({}) '.format(option_number) + i)
         option_number += 1
     print('    (0) {}'.format(exit_message))
+    print('')
 
 
 def get_inputs(list_labels, title):
@@ -173,6 +222,7 @@ def get_inputs(list_labels, title):
     for i in list_labels:
         answer = (input('{} '.format(i)))
         inputs.append(answer)
+    print('')
 
     return inputs
 
@@ -192,3 +242,4 @@ def print_error_message(message):
     """
 
     print(message)
+    print('')
