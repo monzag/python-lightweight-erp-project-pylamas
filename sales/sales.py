@@ -336,6 +336,7 @@ def get_items_sold_between(table, month_from, day_from, year_from, month_to, day
         sale_date = [record[-1], record[-3], record[-2]]
         sale_date = format_date(sale_date)
         if from_date < sale_date and sale_date < to_date:
+            record = record[:2] + [int(element) for element in record[2:]]
             items_between.append(record)
 
     return items_between
