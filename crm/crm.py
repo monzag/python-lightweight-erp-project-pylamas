@@ -256,11 +256,9 @@ def get_longest_name_id(table):
             id_longest_name = id_
 
         elif len(name) == len(longest_name):
-            for letter in name:
-                for letter_2 in longest_name:
-                    if letter < letter_2:
-                        longest_name = name
-                        id_longest_name = id_
+            longest_name = min(name, longest_name)
+            if longest_name == name:
+                id_longest_name = id_
 
     return id_longest_name
 
