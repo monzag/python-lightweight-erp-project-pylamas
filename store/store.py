@@ -187,7 +187,7 @@ def get_counts_by_manufacturers(table):
     Returns:
         dictionary with manufacturer as a key (str) and games number as a value (int)
         (e.g. {'Blizzard Entertainment' : 3})
-        label of a result
+        label: label of a result
     """
     counts_by_manufacturers = {}
 
@@ -205,7 +205,17 @@ def get_counts_by_manufacturers(table):
 # the question: What is the average amount of games in stock of a given manufacturer?
 # return type: number
 def get_average_by_manufacturer(table, manufacturer):
+    '''
+    Counts the average amount of games by manufacturer available in stock.
 
+    Args:
+        table: list of lists with details of each game
+        manufacturer: string being contained in any list from the table
+
+    Returns:
+        result: float
+        label: label of a result
+    '''
     games_instock = 0
     games_count = 0
 
