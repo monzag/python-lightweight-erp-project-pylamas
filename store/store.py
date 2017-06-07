@@ -25,16 +25,27 @@ def start_module():
     Returns:
         None
     """
-    file_path = os.getcwd() + '/store/games.csv'
-    table = get_archive(file_path)
+    table = get_data_from_file()
+    display_menu(table)
 
+
+def get_data_from_file():
+    file_path = os.getcwd() + '/store/games.csv'
+    if os.path.exists(file_path):
+        table = data_manager.get_table_from_file(file_path)
+    else:
+        table = []
+    return table
+
+
+def display_menu(table):
     title = "Store Manager"
     list_options = ["Show list of games",
-               "Add new game",
-               "Remove a game by id",
-               "Update a game by id",
-               "Show amount of games by manufacturer",
-               "Show average amount of games by manufacturer"]
+                    "Add new game",
+                    "Remove a game by id",
+                    "Update a game by id",
+                    "Show amount of games by manufacturer",
+                    "Show average amount of games by manufacturer"]
     exit_message = "Back to main menu"
 
     option = None
@@ -49,31 +60,21 @@ def start_module():
             add(table)
             data_manager.write_table_to_file(file_path, table)
         elif option == '3':
-            show_table(table)
-            table = find_and_remove_record(table)
+            get_record_id_input(table, remove)
             data_manager.write_table_to_file(file_path, table)
         elif option == '4':
-            update(table, id_)
+            get_record_id_input(table, update)
             data_manager.write_table_to_file(file_path, table)
         elif option == '5':
             result, label = get_counts_by_manufacturers(table)
             ui.print_result(result, label)
         elif option == '6':
-            manufacturer = ui.get_inputs([''], 'Type manufacturer\'s name to show it\'s average amount of games in stock')
-            result, label = get_average_by_manufacturer(table, manufacturer[0])
+            result, label = get_manufacturer_name(table)
             ui.print_result(result, label)
         elif option == '0':
             break
         else:
             ui.print_error_message('Invalid input')
-
-
-def get_archive(file_path):
-    if os.path.exists(file_path):
-        table = data_manager.get_table_from_file(file_path)
-    else:
-        table = []
-    return table
 
 
 def show_table(table):
@@ -102,8 +103,8 @@ def add(table):
         Table with a new record
     """
 
-    list_labels = ['Title', 'Manufacturer', 'Price($)', 'Items in stock']
-    new_record = ui.get_inputs(list_labels, 'Add new game')
+    LIST_LABELS = ['Title', 'Manufacturer', 'Price($)', 'Items in stock']
+    new_record = ui.get_inputs(LIST_LABELS, 'Add new game')
 
     id_ = common.generate_random(table)
     money = new_record[2]
@@ -115,22 +116,6 @@ def add(table):
     else:
         ui.print_error_message("Wrong number format! Record add failed!")
 
-    return table
-
-
-def get_id_from_user(table):
-    id_ = ui.get_inputs([''], 'Type id of record')[0]
-    ids = common.get_value_from(table, 0)
-    if id_ not in ids:
-        ui.print_error_message('There is no record with this id')
-    else:
-        return id_
-
-
-def find_and_remove_record(table):
-    id_ = get_id_from_user(table)
-    if id_ != None:
-        table = remove(table, id_)
     return table
 
 
@@ -152,6 +137,28 @@ def remove(table, id_):
     return table
 
 
+def get_record_id_input(table, operation):
+    """
+    Specifies record which user would like to change,
+    and determines if it's possible
+
+    Parameters:
+        table: list of lists containing data
+        operation: str (type of operation to be performed after(update or remove))
+
+    Returns:
+        table - list of lists (updated)
+    """
+    show_table(table)
+    id_ = ui.get_inputs([''], 'Type id of record to be removed/updated')[0]
+    ids = [record[0] for record in table]
+    if id_ in ids:
+        table = operation(table, id_)
+    else:
+        ui.print_error_message('Invalid id input')
+    return table
+
+
 def update(table, id_):
     """
     Updates specified record in the table. Ask users for new data.
@@ -163,14 +170,55 @@ def update(table, id_):
     Returns:
         table with updated record
     """
-
-    position = 1
-    new_data = 'new_name'
     record = common.find_id(table, id_)
-    common.insert_new_data(record, new_data, position)
+    option, amount_options, data_name = data_to_change()
+
+    if option in range(1, amount_options):
+        new_data = ui.get_inputs(['{}: '.format(data_name)], 'Please write new data')
+        is_number = new_data[0].isdigit()
+
+        if option == 1 or option == 2 or (option == 3 and is_number is True) or (option == 4 and is_number is True):
+            common.insert_new_data(record, new_data[0], option)
+        else:
+            ui.print_error_message("Wrong format! Record update failed!")
 
     return table
 
+
+def data_to_change():
+    """
+    Gets from user number of option to change, checks amount of options
+    and data type.
+
+    Returns:
+            option(int): number of option to change
+            amount_options(int): amount of all options
+            data_name(str): title of data to overwrite
+    """
+
+    title = "Which part of record do you want to change?"
+    exit_message = "Back to main menu."
+    list_options = ["Title",
+                    "Manufacturer",
+                    "Price",
+                    "In stock"]
+
+    ui.print_menu(title, list_options, exit_message)
+
+    correct_input = False
+    while correct_input is not True:
+        try:
+            inputs = ui.get_inputs(['Number'], "Choose data to overwrite")
+            option = int(inputs[0])
+            amount_options = len(list_options) + 1
+            data_name = list_options[option - 1]
+            correct_input = True
+
+        except ValueError:
+            ui.print_error_message("Please enter a number!")
+
+        else:
+            return option, amount_options, data_name
 
 # special functions:
 # ------------------
@@ -204,6 +252,20 @@ def get_counts_by_manufacturers(table):
 
 # the question: What is the average amount of games in stock of a given manufacturer?
 # return type: number
+def get_manufacturer_name(table):
+
+    manufacturer = ui.get_inputs([''], 'Type manufacturer\'s name to show it\'s average amount of games in stock')[0]
+    for record in table:
+        if record[2] == manufacturer:
+            result, label = get_average_by_manufacturer(table, manufacturer)
+            return result, label
+
+    result = manufacturer
+    label = 'There is no such manufacturer in database'
+
+    return result, label
+
+
 def get_average_by_manufacturer(table, manufacturer):
     '''
     Counts the average amount of games by manufacturer available in stock.
