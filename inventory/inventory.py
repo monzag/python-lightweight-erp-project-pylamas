@@ -56,6 +56,9 @@ def start_module():
             table = update(table, id_)
             show_table(table)
 
+        elif user_choice[0] == "0":
+            display_menu = False    
+
 
 def show_table(table):
     """
