@@ -26,8 +26,7 @@ def start_module():
         None
     """
 
-    file_path = os.getcwd() + '/crm/customers.csv'
-    table = get_archive(file_path)
+    table = get_data_from_file()
 
     title = 'Customer relationship management'
     list_options = ['Show subscribers',
@@ -55,8 +54,7 @@ def start_module():
             show_table(table)
 
         elif menu == '4':
-            id_ = ui.get_inputs([''], 'Write id: ')
-            id_ = id_[0]
+            id_ = ui.get_inputs([''], 'Write id: ')[0]
             update(table, id_)
 
         elif menu == '5':
@@ -68,7 +66,7 @@ def start_module():
             ui.print_result(person_newsletter, 'List of subsribers')
 
         elif menu == '0':
-            data_manager.write_table_to_file(file_path, table)
+            save_data_to_file(table)
 
         else:
             ui.print_error_message('Invalid input')
@@ -89,13 +87,35 @@ def show_table(table):
     ui.print_table(table, title_list)
 
 
-def get_archive(file_path):
-    if os.path.exists(file_path):
-        table = data_manager.get_table_from_file(file_path)
+def get_data_from_file():
+    '''
+    Read data from file - if exists. If not - data is empty list.
+
+    Returns:
+        table
+    '''
+    file_name = os.getcwd() + '/crm/customers.csv'
+    if os.path.exists(file_name):
+        table = data_manager.get_table_from_file(file_name)
     else:
         table = []
 
     return table
+
+
+def save_data_to_file(table):
+    """
+    Exports data to file using data_manager module
+
+    Args:
+        table - list of lists with overwrite data
+
+    Returns:
+        None
+    """
+
+    file_path = os.getcwd() + '/crm/customers.csv'
+    data_manager.write_table_to_file(file_path, table)
 
 
 def add(table):
@@ -119,6 +139,7 @@ def add(table):
         id_ = common.generate_random(table)
         new_record.insert(0, id_)
         table.append(new_record)
+        save_data_to_file(table)
 
     else:
         ui.print_error_message('Invalid input format.\nYour record will not be added.')
@@ -174,6 +195,7 @@ def remove(table, id_):
 
     record = common.find_id(table, id_[0])
     common.remove_record(table, record)
+    save_data_to_file(table)
 
     return table
 
@@ -192,8 +214,8 @@ def data_to_change():
                     'newsletter? (yes = 1 / no = 0): ']
     exit_message = 'Back to main menu'
     ui.print_menu(title, list_options, exit_message)
-    inputs = ui.get_inputs([''], 'Choose option')
-    option = int(inputs[0])
+    options = ui.get_inputs([''], 'Choose option')
+    option = int(options[0])
 
     return option
 
@@ -223,6 +245,7 @@ def update(table, id_):
         # check condition for name or email or newsletter
         if option == 1 or is_email_valid(new_data) or is_newsletter_valid(new_data):
             common.insert_new_data(record, new_data, option)
+            save_data_to_file(table)
 
         else:
             ui.print_error_message('Invalid input format.\nYour record will not be added.')
