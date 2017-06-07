@@ -82,7 +82,7 @@ def menu_control(table):
     EXIT_MESSAGE = 'Back to main menu'
 
     menu = None
-    while menu != 0:
+    while menu != '0':
         ui.print_menu(TITLE, LIST_OPTIONS, EXIT_MESSAGE)
         menu = ui.get_inputs([''], 'Choose action to perform')[0]
         
@@ -306,8 +306,8 @@ def get_items_sold_between(table, month_from, day_from, year_from, month_to, day
         items_between - list of lists (records that pass comprehension)
     """
     # record = [id, title, price, (-3)month, (-2)day, (-1)year]
-    date_from = format_date(year_from, month_from, day_from)
-    date_to = format_date(year_to, month_to, day_to)
+    date_from = format_date(str(year_from), str(month_from), str(day_from))
+    date_to = format_date(str(year_to), str(month_to), str(day_to))
     items_between = []
     for record in table:
         date_record = format_date(record[-1], record[-3], record[-2])
