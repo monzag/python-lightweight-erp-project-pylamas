@@ -94,11 +94,11 @@ def display_menu(table):
         elif option == '4':
             get_record_id_input(table, update)
         elif option == '5':
-            result, label = get_counts_by_manufacturers(table)
-            ui.print_result(result, label)
+            result = get_counts_by_manufacturers(table)
+            ui.print_result(result, 'Dictionary of total amount of games by manufacturer')
         elif option == '6':
-            result, label = get_manufacturer_name(table)
-            ui.print_result(result, label)
+            result = get_manufacturer_name(table)
+            ui.print_result(result, 'Average amount of games in stock')
         elif option == '0':
             break
         else:
@@ -273,9 +273,7 @@ def get_counts_by_manufacturers(table):
         elif i[2] in counts_by_manufacturers:
             counts_by_manufacturers[i[2]] += 1
 
-    label = 'Dictionary of total amount of games by manufacturer'
-
-    return counts_by_manufacturers, label
+    return counts_by_manufacturers
 
 
 # the question: What is the average amount of games in stock of a given manufacturer?
@@ -291,20 +289,18 @@ def get_manufacturer_name(table):
 
     Returns:
         result: int (if manufacturer exists) or str (if manufacturer does not exist)
-        label: string (label of a result)
     '''
 
     manufacturer = ui.get_inputs([''], 'Type manufacturer\'s name to show it\'s average amount of games in stock')[0]
 
     for record in table:
         if record[2] == manufacturer:
-            result, label = get_average_by_manufacturer(table, manufacturer)
-            return result, label
+            result = get_average_by_manufacturer(table, manufacturer)
+            return result
 
-    result = manufacturer
-    label = 'There is no such manufacturer in database'
+    result = "There is no such manufacturer in database!"
 
-    return result, label
+    return result
 
 
 def get_average_by_manufacturer(table, manufacturer):
@@ -329,6 +325,4 @@ def get_average_by_manufacturer(table, manufacturer):
 
     result = games_instock / games_count
 
-    label = 'Average amount of games by {} in stock'.format(manufacturer)
-
-    return result, label
+    return result
