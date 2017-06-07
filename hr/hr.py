@@ -31,7 +31,8 @@ def start_module():
                     "Add new employee.",
                     "Remove record by id",
                     "Update info about employee.",
-                    "Get list of the oldest employees"]
+                    "Get list of the oldest employees",
+                    "Get List of closest to average age"]
 
     display_menu = True
     while display_menu is True:
@@ -60,6 +61,14 @@ def start_module():
         elif user_choice[0] == "5":
             names_of_oldest = get_oldest_person(table)
             ui.print_result(names_of_oldest, "List of the oldest people")
+
+        elif user_choice[0] == "6":
+            table = sort_table_by_age(table)
+
+            diff_age = calculate_avg_age(table)
+            diff_age = sort_table_by_difference(diff_age)
+            names_of_closest = get_persons_closest_to_average(diff_age)
+            ui.print_result(names_of_closest, "List of closest to average age")
 
         elif user_choice[0] == "0":
             display_menu = False
@@ -95,7 +104,7 @@ def add(table):
     id_ = common.generate_random(table)
     is_date_number = data_input[1].isdigit()
 
-    if is_date_number is True and len(data_input) == 4:
+    if is_date_number is True and len(data_input[1]) == 4:
         data_input.insert(0, id_)
         table.append(data_input)
     else:
@@ -240,7 +249,7 @@ def sort_table_by_age(table):
 
                 table[j][2], table[j + 1][2] = table[j + 1][2], table[j][2]
                 table[j][1], table[j + 1][1] = table[j + 1][1], table[j][1]
-
+                table[j][0], table[j + 1][0] = table[j + 1][0], table[j][0]
     return(table)
 # special functions:
 # ------------------
@@ -284,6 +293,93 @@ def get_oldest_person(table):
 # return type: list of strings (name or names if there are two more with the same value)
 def get_persons_closest_to_average(table):
 
-    # your code
+    """
+    Function checks who is the person with age closest to the avg. age
 
-    pass
+    Args:
+        table: list of records
+
+    Returns:
+            names_of_closest: list with names
+    """
+
+    closest_age = table[-1][0]
+
+    closest_name = table[-1][1]
+    table.pop(-1)
+
+    names_of_closest = []
+    names_of_closest.append(closest_name)
+
+    table_length = len(table) - 1
+
+    for i in range(table_length, -1, -1):
+
+        if table[i][0] == closest_age:
+            names_of_closest.append(table[i][1])
+            table.pop(i)
+
+    return names_of_closest
+
+
+def calculate_avg_age(table):
+    """
+    Function calculate average age of employees and difference
+    beetween age of each person and average age.
+
+    Args:
+        table: list of names and age
+
+    Returns:
+            diff_age(int):difference beetween age of each person and average age.
+    """
+    age_of_person_list = []
+    age_sum = 0
+
+    for i in range(len(table)):
+
+        age = [2017 - table[i][2], table[i][1]]
+        age_of_person_list.append(age)
+        age_sum += age_of_person_list[i][0]
+
+    average_age = age_sum / len(age_of_person_list)
+
+    diff_age = []
+
+    for i in range(len(age_of_person_list)):
+
+        difference = average_age - age_of_person_list[i][0]
+        if difference < 0:
+            difference = difference * -1
+        name = age_of_person_list[i][1]
+        name_and_difference = [difference, name]
+        diff_age.append(name_and_difference)
+
+    return diff_age
+
+
+def sort_table_by_difference(table):
+    """
+    Function uses the bubble sort algorithm to find the closest to
+    average age persons.
+
+    Args:
+        table: list of records to sort
+
+    Returns:
+        sorted table
+    """
+
+
+    for i in range(len(table)-1):
+
+        for j in range(len(table) - 1 - i):
+
+            if table[j][0] < table[j + 1][0]:
+                temp_name = table[j][0]
+
+                table[j][1], table[j + 1][1] = table[j + 1][1], table[j][1]
+                table[j][0], table[j + 1][0] = table[j + 1][0], table[j][0]
+
+
+    return(table)
