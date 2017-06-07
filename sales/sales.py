@@ -94,10 +94,11 @@ def menu_control(table):
             table = remove_record_from_data(table)
         elif menu == '4':
             table = update_record_in_data(table)
-        elif menu == '5'
-            pass
-        elif menu == '6'
-            pass
+        elif menu == '5':
+            lowest_record_id = get_lowest_price_item_id(table)
+            ui.print_error_message(lowest_record_id)
+        elif menu == '6':
+            between_dates_menu(table)
     return table
 
 
@@ -331,3 +332,23 @@ def format_date(year, month, day):
         day = '0' + day
     date = year + ':' + month + ':' + day
     return date
+
+
+def between_dates_menu(table):
+    """
+    Gets user input, checks if it's valid, and prints in table all records -
+    which are closed betweens provided dates
+
+    Parameters:
+        table - list of lists
+    
+    Returns:
+        None
+    """
+    BETWEEN_LABLES = ['year from', 'month from', 'day from', 'year to', 'month to', 'day to']
+    [year_from, month_from, day_from, year_to, month_to, day_to] = ui.get_inputs(BETWEEN_LABLES, 'Input dates')
+    if is_date_vaild(day_from, month_from, year_from) and is_date_vaild(day_to, month_to, year_to):
+        items_between = get_items_sold_between(table, month_from, day_from, year_from, month_to, day_to, year_to)
+        show_table(items_between)
+    else:
+        ui.print_error_message('Invalid date inputs')
