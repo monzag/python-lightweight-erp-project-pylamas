@@ -30,7 +30,8 @@ def start_module():
     list_options = ["Show list of employees.",
                     "Add new employee.",
                     "Remove record by id",
-                    "Update info about employee."]
+                    "Update info about employee.",
+                    "Get list of the oldest employees"]
 
     display_menu = True
     while display_menu is True:
@@ -55,6 +56,10 @@ def start_module():
             table = update(table, id_)
             write_to_file(table)
             show_table(table)
+
+        elif user_choice[0] == "5":
+            names_of_oldest = get_oldest_person(table)
+            ui.print_result(names_of_oldest, "List of the oldest people")
 
         elif user_choice[0] == "0":
             display_menu = False
@@ -191,21 +196,88 @@ def data_to_change():
 
 
 def write_to_file(table):
+
     full_path = os.getcwd()
     file_name = full_path + "/hr/persons.csv"
     data_manager.write_table_to_file(file_name, table)
 
 
+def convert_to_int(table):
+    """
+    Function converts date written in string to integer.
+
+    Args:
+        table: list of records
+
+    Returns:
+            table with converted data
+    """
+
+    for i in range(len(table)):
+        table[i][2] = int(table[i][2])
+
+    return table
+
+
+def sort_table_by_age(table):
+    """
+    Function uses the bubble sort algorithm to find the oldest persons.
+
+    Args:
+        table: list of records to sort
+
+    Returns:
+        sorted table
+    """
+    table = convert_to_int(table)
+
+    for i in range(len(table)-1):
+
+        for j in range(len(table) - 1 - i):
+
+            if table[j][2] < table[j + 1][2]:
+                temp_name = table[j][0]
+
+                table[j][2], table[j + 1][2] = table[j + 1][2], table[j][2]
+                table[j][1], table[j + 1][1] = table[j + 1][1], table[j][1]
+
+    return(table)
 # special functions:
 # ------------------
+
 
 # the question: Who is the oldest person ?
 # return type: list of strings (name or names if there are two more with the same value)
 def get_oldest_person(table):
+    """
+    Function checks who is the oldest person on the list
 
-    # your code
+    Args:
+        table: list of records
 
-    pass
+    Returns:
+            names_of_oldest: list with names of the oldest
+    """
+
+    table = sort_table_by_age(table)
+
+    oldest_birth_year = table[-1][2]
+
+    oldest_name = table[-1][1]
+    table.pop(-1)
+
+    names_of_oldest = []
+    names_of_oldest.append(oldest_name)
+
+    table_length = len(table) - 1
+
+    for i in range(table_length, -1, -1):
+
+        if table[i][2] == oldest_birth_year:
+            names_of_oldest.append(table[i][1])
+            table.pop(i)
+
+    return names_of_oldest
 
 
 # the question: Who is the closest to the average age ?
