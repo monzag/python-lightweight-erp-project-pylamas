@@ -45,19 +45,22 @@ def start_module():
 
         elif user_choice[0] == "2":
             table = add(table)
+            write_to_file(table)
 
         elif user_choice[0] == "3":
             show_table(table)
             id_ = ui.get_inputs(["Id: "], "Type id of record to remove")
             table = remove(table, id_)
+            write_to_file(table)
 
         elif user_choice[0] == "4":
             id_ = ui.get_inputs(["Id: "], "Type id of record to change")
             table = update(table, id_)
+            write_to_file(table)
             show_table(table)
 
         elif user_choice[0] == "0":
-            display_menu = False    
+            display_menu = False
 
 
 def show_table(table):
@@ -199,6 +202,12 @@ def data_to_change():
 
         else:
             return option, amount_data, data_info
+
+
+def write_to_file(table):
+    full_path = os.getcwd()
+    file_name = full_path + "/inventory/inventory.csv"
+    data_manager.write_table_to_file(file_name, table)
 
 
 # special functions:
