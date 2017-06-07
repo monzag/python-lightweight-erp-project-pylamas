@@ -194,6 +194,7 @@ def print_menu(title, list_options, exit_message):
         print('    ({}) '.format(option_number) + i)
         option_number += 1
     print('    (0) {}'.format(exit_message))
+    print('')
 
 
 def get_inputs(list_labels, title):
@@ -221,6 +222,7 @@ def get_inputs(list_labels, title):
     for i in list_labels:
         answer = (input('{} '.format(i)))
         inputs.append(answer)
+    print('')
 
     return inputs
 
@@ -240,3 +242,4 @@ def print_error_message(message):
     """
 
     print(message)
+    print('')
