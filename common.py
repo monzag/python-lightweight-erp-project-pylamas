@@ -11,7 +11,6 @@ import random
 # @table: list of lists
 # @generated: string - randomly generated string (unique in the @table)
 def generate_random(table):
-    # zmniejszę to, obiecuję :D
     """
     Generates random and unique string. Used for id/key generation.
 
@@ -24,7 +23,7 @@ def generate_random(table):
 
     special_char = ['#', '$', '%', '&', '!']
     letter_low = [
-                  'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 
+                  'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
                   'o', 'p', 'q', 'r', 's', 't', 'u', 'w', 'x', 'y', 'z'
                  ]
 
@@ -53,8 +52,16 @@ def generate_random(table):
 
 
 def find_id(table, id_):
-    '''In list of lists find record by id number. Return record.
-    Use in remove() and update()'''
+    '''
+    Find record by id number.
+
+    Args:
+        table - list in lists when element with index 0 is id number
+        id_ - unique string for user
+
+    Returns:
+         record - list from table
+    '''
 
     for record in table:
         if record[0] == id_:
@@ -62,7 +69,15 @@ def find_id(table, id_):
 
 
 def remove_record(table, record):
-    '''Remove record (list of lists) in table. Return table. Use in remove()'''
+    '''Find specific record and its index. Remove it from table.
+
+    Args:
+        table - list in lists
+        record - list from table
+
+    Returns:
+        table without specified record
+    '''
 
     for index, item in enumerate(table):
         if item == record:
@@ -72,8 +87,17 @@ def remove_record(table, record):
 
 
 def insert_new_data(record, new_data, option):
-    '''Replace old data with new_data on proper position in record (list of lists). 
-    Return record. Use in update()'''
+    '''
+    Replace old data with new_data on proper position in record.
+
+    Args:
+        record - list from table with proper id
+        new_data - new string insert in old place
+        option - int, index in record
+
+    Returns:
+         record with new data
+    '''
 
     record[option] = new_data
     return record
@@ -151,7 +175,7 @@ def get_value_from(table, index):
         index - int corresponding to value in table
 
     Returns:
-        values - list of vale
+        values - list of value
     '''
 
     values = [record[index] for record in table]
