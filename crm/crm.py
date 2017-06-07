@@ -205,7 +205,7 @@ def data_to_change():
     Display menu with options, user choose which element should be change.
 
     Returns:
-        option - users input(number). It means index of element in table.
+        option - users input (number). It means index of element in table.
     '''
 
     title = 'What do you want to change? '
