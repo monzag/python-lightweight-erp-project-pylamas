@@ -42,15 +42,18 @@ def start_module():
 
         elif user_choice[0] == "2":
             table = add(table)
+            write_to_file(table)
 
         elif user_choice[0] == "3":
             show_table(table)
             id_ = ui.get_inputs(["Id: "], "Type id of record to remove")
             table = remove(table, id_)
+            write_to_file(table)
 
         elif user_choice[0] == "4":
             id_ = ui.get_inputs(["Id: "], "Type id of record to change")
             table = update(table, id_)
+            write_to_file(table)
             show_table(table)
 
         elif user_choice[0] == "0":
@@ -126,10 +129,8 @@ def update(table, id_):
         table with updated record
     """
 
-
     record = common.find_id(table, id_[0])
     option, amount_data, data_info = data_to_change()
-
 
     if option in range(1, amount_data):
         new_data = ui.get_inputs(["Type " + data_info], 'Please write new data')
@@ -154,6 +155,7 @@ def create_table_from_file():
     file_name = full_path + "/hr/persons.csv"
     table = data_manager.get_table_from_file(file_name)
     return table
+
 
 def data_to_change():
     """
@@ -181,12 +183,18 @@ def data_to_change():
             data_info = list_options[option - 1]
             correct_input = True
 
-
         except ValueError:
             ui.print_error_message("Only numbers!")
 
         else:
             return option, amount_data, data_info
+
+
+def write_to_file(table):
+    full_path = os.getcwd()
+    file_name = full_path + "/hr/persons.csv"
+    data_manager.write_table_to_file(file_name, table)
+
 
 # special functions:
 # ------------------
