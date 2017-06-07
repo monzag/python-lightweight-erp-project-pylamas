@@ -27,9 +27,17 @@ def start_module():
     """
     table = get_data_from_file()
     display_menu(table)
+    save_data_to_file(table)
 
 
 def get_data_from_file():
+    """
+    Imports data from CSV file into a table
+    or returns empty list if file does not exist
+
+    Returns:
+        table - list of lists of data
+    """
     file_path = os.getcwd() + '/store/games.csv'
     if os.path.exists(file_path):
         table = data_manager.get_table_from_file(file_path)
@@ -47,11 +55,21 @@ def save_data_to_file(table):
     Returns:
         None
     """
-    file_path = os.getcwd() + '/sales/sales.csv'
+    file_path = os.getcwd() + '/store/games.csv'
     data_manager.write_table_to_file(file_path, table)
 
 
 def display_menu(table):
+    '''
+    Displays the main menu of the module.
+    Enables user to perform all the operations.
+
+    Args:
+        table: list of lists of data
+
+    Returns:
+
+    '''
     title = "Store Manager"
     list_options = ["Show list of games",
                     "Add new game",
@@ -71,13 +89,10 @@ def display_menu(table):
             show_table(table)
         elif option == '2':
             add(table)
-            save_data_to_file(table)
         elif option == '3':
             get_record_id_input(table, remove)
-            save_data_to_file(table)
         elif option == '4':
             get_record_id_input(table, update)
-            save_data_to_file(table)
         elif option == '5':
             result, label = get_counts_by_manufacturers(table)
             ui.print_result(result, label)
@@ -248,7 +263,7 @@ def get_counts_by_manufacturers(table):
     Returns:
         dictionary with manufacturer as a key (str) and games number as a value (int)
         (e.g. {'Blizzard Entertainment' : 3})
-        label: label of a result
+        label: string (label of a result)
     """
     counts_by_manufacturers = {}
 
@@ -266,6 +281,18 @@ def get_counts_by_manufacturers(table):
 # the question: What is the average amount of games in stock of a given manufacturer?
 # return type: number
 def get_manufacturer_name(table):
+    '''
+    Asks for a manufacturer name and checks if it exists in database.
+    If it exists, launches the get_average_by_manufacturer function
+    and returns its result and label.
+
+    Args:
+        table: list of lists of data
+
+    Returns:
+        result: int (if manufacturer exists) or str (if manufacturer does not exist)
+        label: string (label of a result)
+    '''
 
     manufacturer = ui.get_inputs([''], 'Type manufacturer\'s name to show it\'s average amount of games in stock')[0]
 
