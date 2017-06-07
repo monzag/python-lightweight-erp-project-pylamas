@@ -38,6 +38,19 @@ def get_data_from_file():
     return table
 
 
+def save_data_to_file(table):
+    """
+    Exports data to file using data_manager module
+
+    Parameters:
+        table - list of lists
+    Returns:
+        None
+    """
+    file_path = os.getcwd() + '/sales/sales.csv'
+    data_manager.write_table_to_file(file_path, table)
+
+
 def display_menu(table):
     title = "Store Manager"
     list_options = ["Show list of games",
@@ -58,13 +71,13 @@ def display_menu(table):
             show_table(table)
         elif option == '2':
             add(table)
-            data_manager.write_table_to_file(file_path, table)
+            save_data_to_file(table)
         elif option == '3':
             get_record_id_input(table, remove)
-            data_manager.write_table_to_file(file_path, table)
+            save_data_to_file(table)
         elif option == '4':
             get_record_id_input(table, update)
-            data_manager.write_table_to_file(file_path, table)
+            save_data_to_file(table)
         elif option == '5':
             result, label = get_counts_by_manufacturers(table)
             ui.print_result(result, label)
@@ -171,7 +184,7 @@ def update(table, id_):
         table with updated record
     """
     record = common.find_id(table, id_)
-    option, amount_options, data_name = data_to_change()
+    option, amount_options, data_name = data_to_update()
 
     if option in range(1, amount_options):
         new_data = ui.get_inputs(['{}: '.format(data_name)], 'Please write new data')
@@ -185,7 +198,7 @@ def update(table, id_):
     return table
 
 
-def data_to_change():
+def data_to_update():
     """
     Gets from user number of option to change, checks amount of options
     and data type.
@@ -255,6 +268,7 @@ def get_counts_by_manufacturers(table):
 def get_manufacturer_name(table):
 
     manufacturer = ui.get_inputs([''], 'Type manufacturer\'s name to show it\'s average amount of games in stock')[0]
+
     for record in table:
         if record[2] == manufacturer:
             result, label = get_average_by_manufacturer(table, manufacturer)
@@ -286,10 +300,7 @@ def get_average_by_manufacturer(table, manufacturer):
             games_instock += int(i[4])
             games_count += 1
 
-    if games_count != 0:
-        result = games_instock / games_count
-    else:
-        result = 0
+    result = games_instock / games_count
 
     label = 'Average amount of games by {} in stock'.format(manufacturer)
 
