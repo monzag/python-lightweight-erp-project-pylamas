@@ -18,6 +18,10 @@ def print_table(table, title_list):
     Returns:
         This function doesn't return anything it only prints to console.
     """
+    if table == []:
+        print_error_message("The table is empty! Check if CSV exists in a current folder.")
+        return None
+
     MIN_COLUMN_WIDTH = 8
     CELL_PADDING = 2
     columns_number = len(table[0])
@@ -26,7 +30,7 @@ def print_table(table, title_list):
     middle_row = create_middle_row(table, columns_number, title_list, MIN_COLUMN_WIDTH, CELL_PADDING)
 
     print('◤{}◥'.format(outer_row))
-    for i in range(len(table)):  # jak to poprawić?
+    for i in range(len(table)):
         title_row = create_data_row(table, i, title_list, MIN_COLUMN_WIDTH, CELL_PADDING, is_title=True)
     print(title_row)
     for i in range(len(table)):

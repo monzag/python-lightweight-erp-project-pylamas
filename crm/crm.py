@@ -37,8 +37,8 @@ def start_module():
                     'Get subscribed e-mail']
     exit_message = 'Back to main menu'
 
-    menu = True
-    while menu != '0':
+    show_menu = True
+    while show_menu is True:
         ui.print_menu(title, list_options, exit_message)
         menu = ui.get_inputs([''], 'Choose action')[0]
 
@@ -49,13 +49,10 @@ def start_module():
             add(table)
 
         elif menu == '3':
-            id_ = ui.get_inputs([''], 'Write id: ')
-            table = remove(table, id_)
-            show_table(table)
+            get_record_id_input(table, remove)
 
         elif menu == '4':
-            id_ = ui.get_inputs([''], 'Write id: ')[0]
-            update(table, id_)
+            get_record_id_input(table, update)
 
         elif menu == '5':
             id_longest_name = get_longest_name_id(table)
@@ -66,7 +63,7 @@ def start_module():
             ui.print_result(person_newsletter, 'List of subsribers')
 
         elif menu == '0':
-            save_data_to_file(table)
+            show_menu = False
 
         else:
             ui.print_error_message('Invalid input')
@@ -179,6 +176,28 @@ def is_newsletter_valid(newsletter):
         return True
     else:
         return False
+
+
+def get_record_id_input(table, operation):
+    """
+    Specifies record which user would like to change,
+    and determines if it's possible.
+
+    Args:
+        table: list of lists
+        operation: str (type of operation to be performed after(update or remove))
+
+    Returns:
+        table - list of lists (updated)
+    """
+    show_table(table)
+    id_ = ui.get_inputs([''], 'Type id of record to be {}d'.format(str(operation)))[0]
+    ids = [record[0] for record in table]
+    if id_ in ids:
+        table = operation(table, id_)
+    else:
+        ui.print_error_message('Invalid id input')
+    return table
 
 
 def remove(table, id_):
