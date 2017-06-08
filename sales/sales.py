@@ -28,6 +28,7 @@ def start_module():
         None
     """
     table = get_data_from_file()
+    show_table(get_items_sold_between(table, 2, 12, 2016, 7, 6, 2016))
     table = menu_control(table)
     save_data_to_file(table)
 
@@ -76,9 +77,7 @@ def menu_control(table):
     LIST_OPTIONS = ['Show archived sales',
                     'Add new sale',
                     'Remove existing sale',
-                    'Update existing sale',
-                    'Find item with lowest price',
-                    'Find items between dates']
+                    'Update existing sale']
     EXIT_MESSAGE = 'Back to main menu'
 
     menu = None
@@ -94,11 +93,7 @@ def menu_control(table):
             table = remove_record_from_data(table)
         elif menu == '4':
             table = update_record_in_data(table)
-        elif menu == '5':
-            lowest_record_id = get_lowest_price_item_id(table)
-            ui.print_error_message(lowest_record_id)
-        elif menu == '6':
-            between_dates_menu(table)
+
     return table
 
 
@@ -148,6 +143,7 @@ def get_record_from_user():
     """
     LIST_LABLES = ['title', 'price($)', 'month(mm)', 'day(dd)', 'year(yyyy)']
     new_record = ui.get_inputs(LIST_LABLES, 'Archive new sale')
+
     return new_record
 
 
@@ -196,6 +192,7 @@ def remove_record_from_data(table):
         table = remove(table, id_)
     else:
         ui.print_error_message('Invalid id input')
+
     return table
 
 
@@ -214,6 +211,7 @@ def remove(table, id_):
         if record[0] == id_: # where record[0] is id
             table.pop(index)
     save_data_to_file(table)
+
     return table
 
 
@@ -235,6 +233,7 @@ def update_record_in_data(table):
         table = update(table, id_)
     else:
         ui.print_error_message('Invalid id input')
+
     return table
 
 
@@ -251,6 +250,7 @@ def update(table, id_):
         table with updated record
     """
     updated_record = get_record_from_user()
+
     if is_record_vaild(updated_record):
         for index, record in enumerate(table):
             if record[0] == id_:
@@ -258,6 +258,7 @@ def update(table, id_):
         save_data_to_file(table)
     else:
         ui.print_error_message('Invalid input format')
+
     return table
 
 
@@ -287,12 +288,33 @@ def get_lowest_price_item_id(table):
                 lowest_price = record
         elif int(record[2]) < int(lowest_price[2]):
             lowest_price = record
+
     return lowest_price[0] # which is id
 
 
 
 # the question: Which items are sold between two given dates ? (from_date < sale_date < to_date)
 # return type: list of lists (the filtered table)
+'''
+def get_items_sold_between(table, month_from, day_from, year_from, month_to, day_to, year_to):
+    # record = [id, title, price, (-3)month, (-2)day, (-1)year]
+    items_between = table
+    for index, record in enumerate(items_between):
+        if int(record[-1]) < year_from or int(record[-1]) > year_to:
+            items_between.pop(index)
+    
+    for index, record in enumerate(items_between):
+        if int(record[-3]) < year_from or int(record[-3]) > year_to:
+            items_between.pop(index)
+    
+    for index, record in enumerate(items_between):
+        if int(record[-2]) < year_from or int(record[-2]) > year_to:
+            items_between.pop(index)
+
+    return items_between
+
+
+'''
 def get_items_sold_between(table, month_from, day_from, year_from, month_to, day_to, year_to):
     """
     Searches table for records which dates are between given borders,
@@ -305,50 +327,35 @@ def get_items_sold_between(table, month_from, day_from, year_from, month_to, day
     Returns:
         items_between - list of lists (records that pass comprehension)
     """
+    from_date = format_date([year_from, month_from, day_from])
+    to_date = format_date([year_to, month_to, day_to])
+
     # record = [id, title, price, (-3)month, (-2)day, (-1)year]
-    date_from = format_date(str(year_from), str(month_from), str(day_from))
-    date_to = format_date(str(year_to), str(month_to), str(day_to))
     items_between = []
     for record in table:
-        date_record = format_date(record[-1], record[-3], record[-2])
-        if date_from < date_record and date_record < date_to:
+        sale_date = [record[-1], record[-3], record[-2]]
+        sale_date = format_date(sale_date)
+        if from_date < sale_date and sale_date < to_date:
+            record = record[:2] + [int(element) for element in record[2:]]
             items_between.append(record)
+
     return items_between
 
 
-def format_date(year, month, day):
+def format_date(date_list):
     """
-    Saves date as formated string -> 'yyyy:mm:dd'
+    formats given date as string 'yyyy:mm:dd'
 
     Parameters:
-        str : year, month, day
+        date_list - list of ints [yyyy, mm, dd]
     
     Returns:
-        date : str (formated)
+        str : 'yyyy:mm:dd'
     """
-    if len(month) == 1:
-        month = '0' + month
-    if len(day) == 1:
-        day = '0' + day
-    date = year + ':' + month + ':' + day
-    return date
+    for i, element in enumerate(date_list):
+        if len(str(element)) == 1:
+            date_list[i] = '0' + str(element)
+        else:
+            date_list[i] = str(element)
 
-
-def between_dates_menu(table):
-    """
-    Gets user input, checks if it's valid, and prints in table all records -
-    which are closed betweens provided dates
-
-    Parameters:
-        table - list of lists
-    
-    Returns:
-        None
-    """
-    BETWEEN_LABLES = ['year from', 'month from', 'day from', 'year to', 'month to', 'day to']
-    [year_from, month_from, day_from, year_to, month_to, day_to] = ui.get_inputs(BETWEEN_LABLES, 'Input dates')
-    if is_date_vaild(day_from, month_from, year_from) and is_date_vaild(day_to, month_to, year_to):
-        items_between = get_items_sold_between(table, month_from, day_from, year_from, month_to, day_to, year_to)
-        show_table(items_between)
-    else:
-        ui.print_error_message('Invalid date inputs')
+    return ':'.join(date_list)

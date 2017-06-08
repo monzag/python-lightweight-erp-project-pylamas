@@ -160,11 +160,20 @@ def print_result(result, label):
     Returns:
         This function doesn't return anything it only prints to console.
     """
+    print('{}:\n'.format(label))
 
-    print('{}:'.format(label))
-    print(result)
+    if type(result) is str:
+        print(result)
+
+    if type(result) is list:
+        for i in result:
+            print(i)
+
+    if type(result) is dict:
+        for i in result:
+            print('{}: {}'.format(i, result[i]))
+
     print('')
-
 
 def print_menu(title, list_options, exit_message):
     """

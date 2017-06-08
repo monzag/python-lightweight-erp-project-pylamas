@@ -90,15 +90,15 @@ def display_menu(table):
         elif option == '2':
             add(table)
         elif option == '3':
-            get_record_id_input(table, remove)
+            get_record_id(table, remove)
         elif option == '4':
-            get_record_id_input(table, update)
+            get_record_id(table, update)
         elif option == '5':
             result = get_counts_by_manufacturers(table)
             ui.print_result(result, 'Dictionary of total amount of games by manufacturer')
         elif option == '6':
             result = get_manufacturer_name(table)
-            ui.print_result(result, 'Average amount of games in stock')
+            ui.print_result(str(result), 'Average amount of games in stock')
         elif option == '0':
             break
         else:
@@ -138,7 +138,7 @@ def add(table):
     money = new_record[2]
     instock = new_record[3]
 
-    if common.is_money_valid(money) == True and instock.isdigit():
+    if common.is_money_valid(money) is True and instock.isdigit():
         new_record.insert(0, id_)
         table.append(new_record)
     else:
@@ -165,7 +165,7 @@ def remove(table, id_):
     return table
 
 
-def get_record_id_input(table, operation):
+def get_record_id(table, operation):
     """
     Specifies record which user would like to change,
     and determines if it's possible
@@ -178,7 +178,7 @@ def get_record_id_input(table, operation):
         table - list of lists (updated)
     """
     show_table(table)
-    id_ = ui.get_inputs([''], 'Type id of record to be removed/updated')[0]
+    id_ = ui.get_inputs([''], 'Type id of record to be {}d'.format(str(operation)))[0]
     ids = [record[0] for record in table]
     if id_ in ids:
         table = operation(table, id_)
@@ -253,6 +253,8 @@ def data_to_update():
 
 # the question: How many different kinds of game are available of each manufacturer?
 # return type: a dictionary with this structure: { [manufacturer] : [count] }
+
+
 def get_counts_by_manufacturers(table):
     """
     Counts the number of games by each manufacturer.
