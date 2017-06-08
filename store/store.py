@@ -98,7 +98,7 @@ def display_menu(table):
             ui.print_result(result, 'Dictionary of total amount of games by manufacturer')
         elif option == '6':
             result = get_manufacturer_name(table)
-            ui.print_result(result, 'Average amount of games in stock')
+            ui.print_result(str(result), 'Average amount of games in stock')
         elif option == '0':
             break
         else:
@@ -178,7 +178,7 @@ def get_record_id(table, operation):
         table - list of lists (updated)
     """
     show_table(table)
-    id_ = ui.get_inputs([''], 'Type id of record to be removed/updated')[0]
+    id_ = ui.get_inputs([''], 'Type id of record to be {}d'.format(str(operation)))[0]
     ids = [record[0] for record in table]
     if id_ in ids:
         table = operation(table, id_)
