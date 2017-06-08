@@ -128,13 +128,15 @@ def add(table):
 
     list_labels = ['name: ', 'e-mail: ', 'newsletter? (yes = 1 / no = 0): ']
     new_record = ui.get_inputs(list_labels, 'Please provide information about subscriber')
-
-    email = new_record[1]
-    newsletter = new_record[2]
+    index_id = 0
+    index_email = 1
+    index_newsletter = 2
+    email = new_record[index_email]
+    newsletter = new_record[index_newsletter]
 
     if is_email_valid(email) and is_newsletter_valid(newsletter):
         id_ = common.generate_random(table)
-        new_record.insert(0, id_)
+        new_record.insert(index_id, id_)
         table.append(new_record)
         save_data_to_file(table)
 
@@ -212,7 +214,7 @@ def remove(table, id_):
         Table without specified record.
     """
 
-    record = common.find_id(table, id_[0])
+    record = common.find_id(table, id_)
     common.remove_record(table, record)
     save_data_to_file(table)
 
@@ -284,7 +286,7 @@ def get_longest_name_id(table):
         Id of longest name
 
     '''
-    
+
     longest_name = ''
     id_longest_name = ''
     index_name = 1
