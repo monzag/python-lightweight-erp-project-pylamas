@@ -28,7 +28,6 @@ def start_module():
         None
     """
     table = get_data_from_file()
-    show_table(get_items_sold_between(table, 2, 12, 2016, 7, 6, 2016))
     table = menu_control(table)
     save_data_to_file(table)
 
@@ -77,14 +76,16 @@ def menu_control(table):
     LIST_OPTIONS = ['Show archived sales',
                     'Add new sale',
                     'Remove existing sale',
-                    'Update existing sale']
+                    'Update existing sale',
+                    'Get id of item with lowest price',
+                    'Print items between dates']
     EXIT_MESSAGE = 'Back to main menu'
 
     menu = None
     while menu != '0':
         ui.print_menu(TITLE, LIST_OPTIONS, EXIT_MESSAGE)
         menu = ui.get_inputs([''], 'Choose action to perform')[0]
-        
+
         if menu == '1':
             show_table(table)
         elif menu == '2':
@@ -93,6 +94,10 @@ def menu_control(table):
             table = remove_record_from_data(table)
         elif menu == '4':
             table = update_record_in_data(table)
+        elif menu == '5':
+            show_lowest_id(table)
+        elif menu == '6':
+            show_items_sold_between_user_passed_dates(table)
 
     return table
 
@@ -292,29 +297,22 @@ def get_lowest_price_item_id(table):
     return lowest_price[0] # which is id
 
 
+def show_lowest_id(table):
+    """
+    Finds and prints id of an item with a lowest price
+    
+    Parameters:
+        table - list of lists to search in
+    
+    Returns:
+        None
+    """
+    lowest_id = get_lowest_price_item_id(table)
+    ui.print_result(lowest_id, 'Id of a lowest priced item')
+
 
 # the question: Which items are sold between two given dates ? (from_date < sale_date < to_date)
 # return type: list of lists (the filtered table)
-'''
-def get_items_sold_between(table, month_from, day_from, year_from, month_to, day_to, year_to):
-    # record = [id, title, price, (-3)month, (-2)day, (-1)year]
-    items_between = table
-    for index, record in enumerate(items_between):
-        if int(record[-1]) < year_from or int(record[-1]) > year_to:
-            items_between.pop(index)
-    
-    for index, record in enumerate(items_between):
-        if int(record[-3]) < year_from or int(record[-3]) > year_to:
-            items_between.pop(index)
-    
-    for index, record in enumerate(items_between):
-        if int(record[-2]) < year_from or int(record[-2]) > year_to:
-            items_between.pop(index)
-
-    return items_between
-
-
-'''
 def get_items_sold_between(table, month_from, day_from, year_from, month_to, day_to, year_to):
     """
     Searches table for records which dates are between given borders,
@@ -327,10 +325,9 @@ def get_items_sold_between(table, month_from, day_from, year_from, month_to, day
     Returns:
         items_between - list of lists (records that pass comprehension)
     """
+    # record = [id, title, price, (-3)month, (-2)day, (-1)year]
     from_date = format_date([year_from, month_from, day_from])
     to_date = format_date([year_to, month_to, day_to])
-
-    # record = [id, title, price, (-3)month, (-2)day, (-1)year]
     items_between = []
     for record in table:
         sale_date = [record[-1], record[-3], record[-2]]
@@ -359,3 +356,32 @@ def format_date(date_list):
             date_list[i] = str(element)
 
     return ':'.join(date_list)
+
+
+def show_items_sold_between_user_passed_dates(table):
+    """
+    Holds step by step behaviour of func >get_lowest_price_item_id< in menu
+        1) get dates from user
+        2) check if is valid
+        3) call get_lowest_price_item_id
+        4) show result
+    
+    Parameters:
+        table - list of lists to search in
+    
+    Returns:
+        None
+    """
+    DATE_LABELS = ['year from', 'month from', 'day from', 'year to', 'month to', 'day_to']
+    date = ui.get_inputs(DATE_LABELS, 'Input dates')
+    [year_from, month_from, day_from, year_to, month_to, day_to] = date
+
+    if is_date_vaild(day_from, month_from, year_from) and is_date_vaild(day_to, month_to, year_to)
+        items_between = get_items_sold_between(table, month_from, day_from, year_from, month_to, day_to, year_to)
+        
+        for index, record in enumerate(items_between):
+            items_between[index] = record[:2] + [str(element) for element in record[2:]]
+        show_table(items_between)
+
+    else:
+        ui.print_error_message('Invalid dates input!')
