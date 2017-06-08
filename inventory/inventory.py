@@ -32,7 +32,8 @@ def start_module():
     list_options = ["Show inventory list.",
                     "Add new item.",
                     "Remove record by id",
-                    "Update info about item."]
+                    "Update info about item.",
+                    "Get list of available items"]
 
     display_menu = True
     while display_menu is True:
@@ -58,6 +59,10 @@ def start_module():
             table = update(table, id_)
             write_to_file(table)
             show_table(table)
+
+        elif user_choice[0] == "5":
+            list_of_items = get_available_items(table)
+            ui.print_result(list_of_items, "List of available items")
 
         elif user_choice[0] == "0":
             display_menu = False
@@ -218,10 +223,30 @@ def write_to_file(table):
 #
 # @table: list of lists
 def get_available_items(table):
+    """
+    Function checks the durability of items and if they have
+    not exceeded appends item to list
 
-    # your code
+    Args:
+        table: list of items with info
 
-    pass
+    Returns:
+            list_of_items: list with items that have not exceeded
+    """        
+
+    list_of_items = []
+
+    for i in range(len(table)):
+
+        table[i][3] = int(table[i][3])
+        table[i][4] = int(table[i][4])
+        expiration_date = table[i][3] + table[i][4]
+        durability = 2017 - expiration_date
+
+        if durability <= 0:
+            list_of_items.append(table[i])
+
+    return list_of_items
 
 
 # the question: What are the average durability times for each manufacturer?
