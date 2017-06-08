@@ -29,7 +29,6 @@ def start_module():
     """
     table = get_data_from_file()
     table = menu_control(table)
-    save_data_to_file(table)
 
 
 def get_data_from_file():
