@@ -90,9 +90,9 @@ def display_menu(table):
         elif option == '2':
             add(table)
         elif option == '3':
-            get_record_id_input(table, remove)
+            get_record_id(table, remove)
         elif option == '4':
-            get_record_id_input(table, update)
+            get_record_id(table, update)
         elif option == '5':
             result = get_counts_by_manufacturers(table)
             ui.print_result(result, 'Dictionary of total amount of games by manufacturer')
@@ -165,7 +165,7 @@ def remove(table, id_):
     return table
 
 
-def get_record_id_input(table, operation):
+def get_record_id(table, operation):
     """
     Specifies record which user would like to change,
     and determines if it's possible
