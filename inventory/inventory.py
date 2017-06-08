@@ -33,7 +33,8 @@ def start_module():
                     "Add new item.",
                     "Remove record by id",
                     "Update info about item.",
-                    "Get list of available items"]
+                    "Get list of available items",
+                    "Get average durability by manufacturers"]
 
     display_menu = True
     while display_menu is True:
@@ -63,6 +64,10 @@ def start_module():
         elif user_choice[0] == "5":
             list_of_items = get_available_items(table)
             ui.print_result(list_of_items, "List of available items")
+
+        elif user_choice[0] == "6":
+            average_durability = get_average_durability_by_manufacturers(table)
+            ui.print_result(average_durability, "Get average durability by manufacturers dctionary")
 
         elif user_choice[0] == "0":
             display_menu = False
@@ -232,7 +237,7 @@ def get_available_items(table):
 
     Returns:
             list_of_items: list with items that have not exceeded
-    """        
+    """
 
     list_of_items = []
 
@@ -254,7 +259,33 @@ def get_available_items(table):
 #
 # @table: list of lists
 def get_average_durability_by_manufacturers(table):
+    """
+    Function creates dictionary with manufacturers as keys
+    and average durability as items.
 
-    # your code
+    Args:
+        table: list with data
 
-    pass
+    Returns:
+            average_durability(dictionary): dictionary key[manufacturer] : item[average durability]
+    """
+
+    average_durability = {}
+
+    for i in range(len(table)):
+        table[i][4] = int(table[i][4])
+
+    manufacturers = [name[2] for name in table]
+
+    single_manufacturers = list(set(manufacturers))
+
+    for i in range(len(single_manufacturers)):
+        durability_sum = 0
+        count = 0
+        for j in range(len(manufacturers)):
+            if single_manufacturers[i] == manufacturers[j]:
+                count += 1
+                durability_sum += int(table[j][4])
+        average_durability[single_manufacturers[i]] = durability_sum / count
+
+    return average_durability
