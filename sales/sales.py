@@ -374,13 +374,15 @@ def show_items_sold_between_user_passed_dates(table):
     """
     DATE_LABELS = ['year from', 'month from', 'day from', 'year to', 'month to', 'day_to']
     date = ui.get_inputs(DATE_LABELS, 'Input dates')
+
     [year_from, month_from, day_from, year_to, month_to, day_to] = date
 
-    if is_date_vaild(day_from, month_from, year_from) and is_date_vaild(day_to, month_to, year_to)
+    if is_date_vaild(day_from, month_from, year_from) and is_date_vaild(day_to, month_to, year_to):
         items_between = get_items_sold_between(table, month_from, day_from, year_from, month_to, day_to, year_to)
         
         for index, record in enumerate(items_between):
             items_between[index] = record[:2] + [str(element) for element in record[2:]]
+
         show_table(items_between)
 
     else:
