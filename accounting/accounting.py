@@ -29,7 +29,6 @@ def start_module():
         None
     """
     table = get_data_from_file()
-    which_year_max(table)
     table = menu_control(table)
 
 
@@ -207,13 +206,19 @@ def remove_record_from_data(table):
     Returns:
         table : list of lists (updated)
     """
-    show_table(table)
-    id_ = ui.get_inputs([''], 'Type id of record to be removed')[0]
-    ids = [record[0] for record in table]
-    if id_ in ids:
-        table = remove(table, id_)
+    if len(table) > 0:
+
+        show_table(table)
+        id_ = ui.get_inputs([''], 'Type id of record to be removed')[0]
+        ids = [record[0] for record in table]
+        if id_ in ids:
+            table = remove(table, id_)
+        else:
+            ui.print_error_message('Invalid id input')
+    
     else:
-        ui.print_error_message('Invalid id input')
+        ui.print_error_message('There is no data in archive')
+
     return table
 
 
@@ -246,13 +251,18 @@ def update_record_in_data(table):
     Returns:
         table - list of lists (updated)
     """
-    show_table(table)
-    id_ = ui.get_inputs([''], 'Type id of record to be changed')[0]
-    ids = [record[0] for record in table]
-    if id_ in ids:
-        table = update(table, id_)
+    if len(table) > 0:
+
+        show_table(table)
+        id_ = ui.get_inputs([''], 'Type id of record to be changed')[0]
+        ids = [record[0] for record in table]
+        if id_ in ids:
+            table = update(table, id_)
+        else:
+            ui.print_error_message('Invalid id input')
     else:
-        ui.print_error_message('Invalid id input')
+        ui.print_error_message("There is no data in archive")
+
     return table
 
 
@@ -344,8 +354,13 @@ def show_most_profitable_year(table):
     Returns:
         None
     """
-    max_year = which_year_max(table)
-    ui.print_result(str(max_year), 'Most profitable year')
+    if len(table) > 0:
+
+        max_year = which_year_max(table)
+        ui.print_result(str(max_year), 'Most profitable year')
+    
+    else:
+        ui.print_error_message('There is no data in archive')
 
 
 # the question: What is the average (per item) profit in a given year? [(profit)/(items count) ]
@@ -371,7 +386,8 @@ def avg_amount(table, year):
 
 def show_average_profit_for_user_passed_year(table):
     """
-    Calculates, and displays most profitable year
+    Calculates, and displays most profitable year provided
+    from user
 
     Parameters:
         table - list of lists to be searched
@@ -379,13 +395,18 @@ def show_average_profit_for_user_passed_year(table):
     Returns:
         None
     """
-    year = ui.get_inputs([''], 'Choose year to calculate')[0]
-    if common.is_year_valid(year):
-        average = avg_amount(table, int(year))
-        if average != None:
-            average = str(round(average, 2))
-            ui.print_result(average, 'The average profit for {} year was'.format(year))
+    if len(table) > 0:
+
+        year = ui.get_inputs([''], 'Choose year to calculate')[0]
+        if common.is_year_valid(year):
+            average = avg_amount(table, int(year))
+            if average != None:
+                average = str(round(average, 2))
+                ui.print_result(average, 'The average profit for {} year was'.format(year))
+            else:
+                ui.print_error_message('There is no data for {} year.'.format(year))
         else:
-            ui.print_error_message('There is no data for {} year.'.format(year))
+            ui.print_error_message('Invalid input')
+
     else:
-        ui.print_error_message('Invalid input')
+        ui.print_error_message('There is no data in archive')
