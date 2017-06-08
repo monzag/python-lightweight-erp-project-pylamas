@@ -138,7 +138,7 @@ def add(table):
     money = new_record[2]
     instock = new_record[3]
 
-    if common.is_money_valid(money) == True and instock.isdigit():
+    if common.is_money_valid(money) is True and instock.isdigit():
         new_record.insert(0, id_)
         table.append(new_record)
     else:
@@ -253,6 +253,8 @@ def data_to_update():
 
 # the question: How many different kinds of game are available of each manufacturer?
 # return type: a dictionary with this structure: { [manufacturer] : [count] }
+
+
 def get_counts_by_manufacturers(table):
     """
     Counts the number of games by each manufacturer.
