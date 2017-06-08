@@ -129,7 +129,7 @@ def is_day_valid(day):
     Returns:
         boolean
     """
-    if day.isdigit() and len(day) == 2:
+    if day.isdigit():
         if int(day) > 0 and int(day) < 32 and len(day) == 2:
             return True
     return False
@@ -145,7 +145,7 @@ def is_month_valid(month):
     Returns:
         boolean
     """
-    if month.isdigit() and len(month) == 2:
+    if month.isdigit():
         if int(month) > 0 and int(month) < 13:
             return True
     return False
