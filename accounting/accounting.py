@@ -77,7 +77,9 @@ def menu_control(table):
     LIST_OPTIONS = ['Show archived incomes/outcomes',
                     'Add to archive  income/outcome',
                     'Remove existing income/outcome',
-                    'Update existing income/outcome']
+                    'Update existing income/outcome',
+                    'Find most profitable year',
+                    'Find average profit for given year']
     EXIT_MESSAGE = 'Back to main menu'
 
     menu = None
@@ -93,6 +95,12 @@ def menu_control(table):
             table = remove_record_from_data(table)
         elif menu == '4':
             table = update_record_in_data(table)
+        elif menu == '5':
+            show_most_profitable_year(table)
+        elif menu == '6':
+            show_average_profit_for_user_passed_year(table)
+        else:
+            ui.print_error_message('Choose number from menu')
 
     return table
 
@@ -326,6 +334,20 @@ def which_year_max(table):
     return int(year_max[0])
 
 
+def show_most_profitable_year(table):
+    """
+    Calculates, and displays most profitable year
+
+    Parameters:
+        table - list of lists to be searched
+
+    Returns:
+        None
+    """
+    max_year = which_year_max(table)
+    ui.print_result(str(max_year), 'Most profitable year')
+
+
 # the question: What is the average (per item) profit in a given year? [(profit)/(items count) ]
 # return the answer (number)
 def avg_amount(table, year):
@@ -345,3 +367,25 @@ def avg_amount(table, year):
         if int(year_data[0]) == year:
             average = year_data[1]/year_data[2]
     return average
+
+
+def show_average_profit_for_user_passed_year(table):
+    """
+    Calculates, and displays most profitable year
+
+    Parameters:
+        table - list of lists to be searched
+
+    Returns:
+        None
+    """
+    year = ui.get_inputs([''], 'Choose year to calculate')[0]
+    if common.is_year_valid(year):
+        average = avg_amount(table, int(year))
+        if average != None:
+            average = str(round(average, 2))
+            ui.print_result(average, 'The average profit for {} year was'.format(year))
+        else:
+            ui.print_error_message('There is no data for {} year.'.format(year))
+    else:
+        ui.print_error_message('Invalid input')
