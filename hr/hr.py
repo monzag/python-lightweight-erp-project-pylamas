@@ -63,11 +63,8 @@ def start_module():
             ui.print_result(names_of_oldest, "List of the oldest people")
 
         elif user_choice[0] == "6":
-            table = sort_table_by_age(table)
 
-            diff_age = calculate_avg_age(table)
-            diff_age = sort_table_by_difference(diff_age)
-            names_of_closest = get_persons_closest_to_average(diff_age)
+            names_of_closest = get_persons_closest_to_average(table)
             ui.print_result(names_of_closest, "List of closest to average age")
 
         elif user_choice[0] == "0":
@@ -302,6 +299,9 @@ def get_persons_closest_to_average(table):
     Returns:
             names_of_closest: list with names
     """
+    table = sort_table_by_age(table)
+    diff_age = calculate_avg_age(table)
+    table = sort_table_by_difference(diff_age)
 
     closest_age = table[-1][0]
 
@@ -370,7 +370,6 @@ def sort_table_by_difference(table):
         sorted table
     """
 
-
     for i in range(len(table)-1):
 
         for j in range(len(table) - 1 - i):
@@ -380,6 +379,5 @@ def sort_table_by_difference(table):
 
                 table[j][1], table[j + 1][1] = table[j + 1][1], table[j][1]
                 table[j][0], table[j + 1][0] = table[j + 1][0], table[j][0]
-
 
     return(table)
