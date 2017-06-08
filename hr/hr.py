@@ -164,14 +164,17 @@ def create_table_from_file():
     Returns:
             table
     """
-    try:
-        full_path = os.getcwd()
-        file_name = full_path + "/hr/persons.csv"
-        table = data_manager.get_table_from_file(file_name)
-        return table
 
-    except FileNotFoundError:
+    full_path = os.getcwd()
+    file_name = full_path + "/hr/persons.csv"
+    if os.path.exists(file_name):
+        table = data_manager.get_table_from_file(file_name)
+
+    else:
         ui.print_error_message("There is no file to read!")
+        table = []
+
+    return table
 
 
 def data_to_change():

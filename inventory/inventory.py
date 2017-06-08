@@ -111,8 +111,10 @@ def add(table):
     if is_date_number is True and is_durability_number is True:
         data_input.insert(0, id_)
         table.append(data_input)
+
     elif is_date_number is False:
         ui.print_error_message("Wrong year format! Record add failed!")
+
     elif is_durability_number is False:
         ui.print_error_message("Wrong durability format! Record add failed!")
 
@@ -179,14 +181,18 @@ def create_table_from_file():
     Returns:
             table
     """
-    try:
-        full_path = os.getcwd()
-        file_name = full_path + "/inventory/inventory.csv"
-        table = data_manager.get_table_from_file(file_name)
-        return table
 
-    except FileNotFoundError:
+    full_path = os.getcwd()
+    file_name = full_path + "/inventory/inventory.csv"
+
+    if os.path.exists(file_name):
+        table = data_manager.get_table_from_file(file_name)
+
+    else:
         ui.print_error_message("There is no file to read!")
+        table = []
+
+    return table
 
 
 def data_to_change():
