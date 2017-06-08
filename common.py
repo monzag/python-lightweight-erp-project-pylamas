@@ -130,7 +130,7 @@ def is_day_valid(day):
         boolean
     """
     if day.isdigit():
-        if int(day) > 0 and int(day) < 32 and len(day) == 2:
+        if int(day) > 0 and int(day) < 32:
             return True
     return False
 
