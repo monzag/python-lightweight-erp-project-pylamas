@@ -17,9 +17,11 @@ def print_table(table, title_list):
 
     Returns:
         This function doesn't return anything it only prints to console.
+        If table is empty or its data is invalid, then returns None.
     """
-    if table == []:
-        print_error_message("The table is empty! Check if CSV exists in a current folder.")
+
+    is_table_wrong = error_check(table, title_list)
+    if is_table_wrong is True:
         return None
 
     MIN_COLUMN_WIDTH = 8
@@ -38,6 +40,32 @@ def print_table(table, title_list):
         print(middle_row)
         print(data_row)
     print('◣{}◢'.format(outer_row))
+
+
+def error_check(table, title_list):
+    '''
+    Checks if table is empty, has different amount of entries in lists
+    or has different amount of entries between lists and titles.
+
+    Args:
+        table: list of lists with data
+        title_list: list containing table headers
+
+    Returns:
+        boolean
+    '''
+    if table == []:
+        print_error_message("The table is empty! Check if CSV exists in a current folder.")
+        return True
+    for column in table:
+        if len(table[0]) != len(column):
+            print_error_message("Rows has different amount of data. Check the CSV file.")
+            return True
+    if len(title_list) != len(table[0]):
+        print_error_message("The table has wrong amount of data! Compare title_list with CSV file.")
+        return True
+
+    return False
 
 
 def create_data_row(table, list_index, title_list, MIN_COLUMN_WIDTH, CELL_PADDING, is_title=False):
