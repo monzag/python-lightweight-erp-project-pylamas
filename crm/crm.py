@@ -49,10 +49,10 @@ def start_module():
             add(table)
 
         elif menu == '3':
-            get_record_id_input(table, remove)
+            get_record_id_inputs(table, remove)
 
         elif menu == '4':
-            get_record_id_input(table, update)
+            get_record_id_inputs(table, update)
 
         elif menu == '5':
             id_longest_name = get_longest_name_id(table)
@@ -178,7 +178,7 @@ def is_newsletter_valid(newsletter):
         return False
 
 
-def get_record_id_input(table, operation):
+def get_record_id_inputs(table, operation):
     """
     Specifies record which user would like to change,
     and determines if it's possible.
@@ -284,25 +284,30 @@ def get_longest_name_id(table):
         Id of longest name
 
     '''
+    
     longest_name = ''
     id_longest_name = ''
     index_name = 1
     index_id = 0
 
-    for row in table:
-        name = row[index_name].lower()
-        id_ = row[index_id]
+    try:
+        for row in table:
+            name = row[index_name].lower()
+            id_ = row[index_id]
 
-        if len(name) > len(longest_name):
-            longest_name = name
-            id_longest_name = id_
-
-        elif len(name) == len(longest_name):
-            longest_name = min(name, longest_name)
-            if longest_name == name:
+            if len(name) > len(longest_name):
+                longest_name = name
                 id_longest_name = id_
 
-    return id_longest_name
+            elif len(name) == len(longest_name):
+                longest_name = min(name, longest_name)
+                if longest_name == name:
+                    id_longest_name = id_
+    
+        return id_longest_name
+
+    except IndexError:
+        ui.print_error_message('Not enough items in file.')
 
 
 def get_subscribed_emails(table):
@@ -320,9 +325,13 @@ def get_subscribed_emails(table):
     index_newsletter = 3
     person_with_newsletter = []
 
-    for row in table:
-        if row[index_newsletter] == '1':
-            record = row[index_email] + ";" + row[index_name]
-            person_with_newsletter.append(record)
+    try: 
+        for row in table:
+            if row[index_newsletter] == '1':
+                record = row[index_email] + ";" + row[index_name]
+                person_with_newsletter.append(record)
 
-    return person_with_newsletter
+        return person_with_newsletter
+
+    except IndexError:
+        ui.print_error_message('Not enough items in file.')
