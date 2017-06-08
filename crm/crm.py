@@ -94,7 +94,6 @@ def get_data_from_file():
     file_name = os.getcwd() + '/crm/customers.csv'
     if os.path.exists(file_name):
         table = data_manager.get_table_from_file(file_name)
-        print('here')
     else:
         table = []
 
