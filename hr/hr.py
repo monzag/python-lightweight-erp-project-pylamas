@@ -81,8 +81,11 @@ def show_table(table):
     Returns:
         None
     """
-    title_list = ["id", "Name and Surname", "Year of birth"]
-    ui.print_table(table, title_list)
+    try:
+        title_list = ["id", "Name and Surname", "Year of birth"]
+        ui.print_table(table, title_list)
+    except TypeError:
+        ui.print_error_message("No data to show!")
 
 
 def add(table):
@@ -161,11 +164,14 @@ def create_table_from_file():
     Returns:
             table
     """
+    try:
+        full_path = os.getcwd()
+        file_name = full_path + "/hr/persons.csv"
+        table = data_manager.get_table_from_file(file_name)
+        return table
 
-    full_path = os.getcwd()
-    file_name = full_path + "/hr/persons.csv"
-    table = data_manager.get_table_from_file(file_name)
-    return table
+    except FileNotFoundError:
+        ui.print_error_message("There is no file to read!")
 
 
 def data_to_change():
@@ -205,7 +211,10 @@ def write_to_file(table):
 
     full_path = os.getcwd()
     file_name = full_path + "/hr/persons.csv"
-    data_manager.write_table_to_file(file_name, table)
+    if os.path.exists('persons.csv'):
+        data_manager.write_table_to_file(file_name, table)
+    else:
+        ui.print_error_message("There is no such file!")
 
 
 def convert_to_int(table):

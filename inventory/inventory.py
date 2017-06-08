@@ -83,9 +83,11 @@ def show_table(table):
     Returns:
         None
     """
-
-    title_list = ["id", "Name", "Manufacturer", "Purchase Date", "Durability"]
-    ui.print_table(table, title_list)
+    try:
+        title_list = ["id", "Name", "Manufacturer", "Purchase Date", "Durability"]
+        ui.print_table(table, title_list)
+    except TypeError:
+        ui.print_error_message("No data to show!")
 
 
 def add(table):
@@ -177,11 +179,14 @@ def create_table_from_file():
     Returns:
             table
     """
+    try:
+        full_path = os.getcwd()
+        file_name = full_path + "/inventory/inventory.csv"
+        table = data_manager.get_table_from_file(file_name)
+        return table
 
-    full_path = os.getcwd()
-    file_name = full_path + "/inventory/inventory.csv"
-    table = data_manager.get_table_from_file(file_name)
-    return table
+    except FileNotFoundError:
+        ui.print_error_message("There is no file to read!")
 
 
 def data_to_change():

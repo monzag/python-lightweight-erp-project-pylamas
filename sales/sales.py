@@ -192,13 +192,18 @@ def remove_record_from_data(table):
     Returns:
         table : list of lists (updated)
     """
-    show_table(table)
-    id_ = ui.get_inputs([''], 'Type id of record to be removed')[0]
-    ids = [record[0] for record in table]
-    if id_ in ids:
-        table = remove(table, id_)
+    if len(table) > 0:
+
+        show_table(table)
+        id_ = ui.get_inputs([''], 'Type id of record to be removed')[0]
+        ids = [record[0] for record in table]
+        if id_ in ids:
+            table = remove(table, id_)
+        else:
+            ui.print_error_message('Invalid id input')
+
     else:
-        ui.print_error_message('Invalid id input')
+        ui.print_error_message('There is no data in archive')
 
     return table
 
@@ -233,13 +238,18 @@ def update_record_in_data(table):
     Returns:
         table - list of lists (updated)
     """
-    show_table(table)
-    id_ = ui.get_inputs([''], 'Type id of record to be changed')[0]
-    ids = [record[0] for record in table]
-    if id_ in ids:
-        table = update(table, id_)
+    if len(table) > 0:
+
+        show_table(table)
+        id_ = ui.get_inputs([''], 'Type id of record to be changed')[0]
+        ids = [record[0] for record in table]
+        if id_ in ids:
+            table = update(table, id_)
+        else:
+            ui.print_error_message('Invalid id input')
+
     else:
-        ui.print_error_message('Invalid id input')
+        ui.print_error_message('There is no data in archive')
 
     return table
 
@@ -309,9 +319,13 @@ def show_lowest_id(table):
     Returns:
         None
     """
-    lowest_id = get_lowest_price_item_id(table)
-    ui.print_result(lowest_id, 'Id of a lowest priced item')
+    if len(table) > 0:
 
+        lowest_id = get_lowest_price_item_id(table)
+        ui.print_result(lowest_id, 'Id of a lowest priced item')
+
+    else:
+        ui.print_error_message('There is no data in archive.')
 
 # the question: Which items are sold between two given dates ? (from_date < sale_date < to_date)
 # return type: list of lists (the filtered table)
