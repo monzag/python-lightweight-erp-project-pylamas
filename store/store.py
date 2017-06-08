@@ -27,7 +27,6 @@ def start_module():
     """
     table = get_data_from_file()
     display_menu(table)
-    save_data_to_file(table)
 
 
 def get_data_from_file():
@@ -79,11 +78,11 @@ def display_menu(table):
                     "Show average amount of games by manufacturer"]
     exit_message = "Back to main menu"
 
-    option = None
-    while option != '0':
+    back_to_main_menu = False
+
+    while back_to_main_menu is False:
         ui.print_menu(title, list_options, exit_message)
-        inputs = ui.get_inputs([''], 'Choose action to perform')
-        option = inputs[0]
+        option = ui.get_inputs([''], 'Choose action to perform')[0]
 
         if option == '1':
             show_table(table)
@@ -100,9 +99,9 @@ def display_menu(table):
             result = get_manufacturer_name(table)
             ui.print_result(str(result), 'Average amount of games in stock')
         elif option == '0':
-            break
+            back_to_main_menu = True
         else:
-            ui.print_error_message('Invalid input')
+            ui.print_error_message("There is no such option.")
 
 
 def show_table(table):
@@ -115,7 +114,6 @@ def show_table(table):
     Returns:
         None
     """
-
     title_list = ['ID', 'Title', 'Manufacturer', 'Price', 'In stock']
     ui.print_table(table, title_list)
 
@@ -141,6 +139,7 @@ def add(table):
     if common.is_money_valid(money) is True and instock.isdigit():
         new_record.insert(0, id_)
         table.append(new_record)
+        save_data_to_file(table)
     else:
         ui.print_error_message("Wrong number format! Record add failed!")
 
@@ -161,6 +160,7 @@ def remove(table, id_):
 
     record = common.find_id(table, id_)
     common.remove_record(table, record)
+    save_data_to_file(table)
 
     return table
 
@@ -178,7 +178,7 @@ def get_record_id(table, operation):
         table - list of lists (updated)
     """
     show_table(table)
-    id_ = ui.get_inputs([''], 'Type id of record to be {}d'.format(str(operation)))[0]
+    id_ = ui.get_inputs([''], 'Type id of record to be removed/updated')[0]
     ids = [record[0] for record in table]
     if id_ in ids:
         table = operation(table, id_)
@@ -207,6 +207,7 @@ def update(table, id_):
 
         if option == 1 or option == 2 or (option == 3 and is_number is True) or (option == 4 and is_number is True):
             common.insert_new_data(record, new_data[0], option)
+            save_data_to_file(table)
         else:
             ui.print_error_message("Wrong format! Record update failed!")
 
