@@ -94,6 +94,7 @@ def get_data_from_file():
     file_name = os.getcwd() + '/crm/customers.csv'
     if os.path.exists(file_name):
         table = data_manager.get_table_from_file(file_name)
+        print('here')
     else:
         table = []
 
@@ -191,7 +192,7 @@ def get_record_id_inputs(table, operation):
         table - list of lists (updated)
     """
     show_table(table)
-    id_ = ui.get_inputs([''], 'Type id of record to be {}d'.format(str(operation)))[0]
+    id_ = ui.get_inputs([''], 'Type id of record')[0]
     ids = [record[0] for record in table]
     if id_ in ids:
         table = operation(table, id_)
