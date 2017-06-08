@@ -104,7 +104,7 @@ def add(table):
 
     id_ = common.generate_random(table)
     is_date_number = data_input[2].isdigit() and len(data_input) == 4
-    is_durability_number = data_input[2].isdigit()
+    is_durability_number = data_input[3].isdigit()
 
     if is_date_number is True and is_durability_number is True:
         data_input.insert(0, id_)
@@ -158,8 +158,10 @@ def update(table, id_):
         if option == 1 or option == 2:
             common.insert_new_data(record, new_data[0], option)
 
-        elif ((option == 3 and is_date_number is True)
-              or (option == 4 and is_durability_number is True)):
+        elif option == 3 and is_date_number is True:
+            common.insert_new_data(record, new_data[0], option)
+
+        elif option == 4 and is_durability_number is True:
             common.insert_new_data(record, new_data[0], option)
 
         else:
