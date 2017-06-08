@@ -25,6 +25,7 @@ def start_module():
     Returns:
         None
     """
+
     table = get_data_from_file()
     display_menu(table)
 
@@ -37,6 +38,7 @@ def get_data_from_file():
     Returns:
         table - list of lists of data
     """
+
     file_path = os.getcwd() + '/store/games.csv'
     if os.path.exists(file_path):
         table = data_manager.get_table_from_file(file_path)
@@ -54,6 +56,7 @@ def save_data_to_file(table):
     Returns:
         None
     """
+
     file_path = os.getcwd() + '/store/games.csv'
     data_manager.write_table_to_file(file_path, table)
 
@@ -67,8 +70,9 @@ def display_menu(table):
         table: list of lists of data
 
     Returns:
-
+        nothing
     '''
+
     title = "Store Manager"
     list_options = ["Show list of games",
                     "Add new game",
@@ -114,6 +118,7 @@ def show_table(table):
     Returns:
         None
     """
+
     title_list = ['ID', 'Title', 'Manufacturer', 'Price', 'In stock']
     ui.print_table(table, title_list)
 
@@ -177,6 +182,7 @@ def get_record_id(table, operation):
     Returns:
         table - list of lists (updated)
     """
+
     show_table(table)
     id_ = ui.get_inputs([''], 'Type id of record to be removed/updated')[0]
     ids = [record[0] for record in table]
@@ -198,6 +204,7 @@ def update(table, id_):
     Returns:
         table with updated record
     """
+
     record = common.find_id(table, id_)
     option, amount_options, data_name = data_to_update()
 
@@ -268,6 +275,7 @@ def get_counts_by_manufacturers(table):
         (e.g. {'Blizzard Entertainment' : 3})
         label: string (label of a result)
     """
+
     counts_by_manufacturers = {}
 
     for i in table:
@@ -318,6 +326,7 @@ def get_average_by_manufacturer(table, manufacturer):
         result: float
         label: label of a result
     '''
+
     games_instock = 0
     games_count = 0
 
