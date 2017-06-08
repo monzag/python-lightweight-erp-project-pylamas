@@ -259,9 +259,8 @@ def sort_table_by_age(table):
             if table[j][2] < table[j + 1][2]:
                 temp_name = table[j][0]
 
-                table[j][2], table[j + 1][2] = table[j + 1][2], table[j][2]
-                table[j][1], table[j + 1][1] = table[j + 1][1], table[j][1]
-                table[j][0], table[j + 1][0] = table[j + 1][0], table[j][0]
+                table[j], table[j + 1] = table[j + 1], table[j]
+
     return(table)
 # special functions:
 # ------------------
@@ -392,7 +391,6 @@ def sort_table_by_difference(table):
             if table[j][0] < table[j + 1][0]:
                 temp_name = table[j][0]
 
-                table[j][1], table[j + 1][1] = table[j + 1][1], table[j][1]
-                table[j][0], table[j + 1][0] = table[j + 1][0], table[j][0]
+                table[j], table[j + 1] = table[j + 1], table[j]
 
     return(table)
