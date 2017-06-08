@@ -259,7 +259,7 @@ def get_inputs(list_labels, title):
     """
     inputs = []
 
-    print('{}:'.format(title))
+    print('{}'.format(title))
     for i in list_labels:
         answer = (input('{} '.format(i)))
         inputs.append(answer)
