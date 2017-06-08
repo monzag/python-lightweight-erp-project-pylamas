@@ -98,6 +98,8 @@ def menu_control(table):
             show_lowest_id(table)
         elif menu == '6':
             show_items_sold_between_user_passed_dates(table)
+        else:
+            ui.print_error_message('Choose number from menu')
 
     return table
 
