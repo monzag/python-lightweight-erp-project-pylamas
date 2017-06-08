@@ -52,23 +52,27 @@ def start_module():
             table = remove(table, id_)
             write_to_file(table)
 
-        elif user_choice[0] == "4":
-            id_ = ui.get_inputs(["Id: "], "Type id of record to change")
-            table = update(table, id_)
-            write_to_file(table)
-            show_table(table)
-
-        elif user_choice[0] == "5":
-            names_of_oldest = get_oldest_person(table)
-            ui.print_result(names_of_oldest, "List of the oldest people")
-
-        elif user_choice[0] == "6":
-
-            names_of_closest = get_persons_closest_to_average(table)
-            ui.print_result(names_of_closest, "List of closest to average age")
-
         elif user_choice[0] == "0":
             display_menu = False
+
+        if len(table) > 0:
+
+            if user_choice[0] == "4":
+
+                id_ = ui.get_inputs(["Id: "], "Type id of record to change")
+                table = update(table, id_)
+                write_to_file(table)
+                show_table(table)
+
+            elif user_choice[0] == "5":
+
+                names_of_oldest = get_oldest_person(table)
+                ui.print_result(names_of_oldest, "List of the oldest people")
+
+            elif user_choice[0] == "6":
+
+                names_of_closest = get_persons_closest_to_average(table)
+                ui.print_result(names_of_closest, "List of closest to average age")
 
 
 def show_table(table):
@@ -126,7 +130,8 @@ def remove(table, id_):
     """
 
     record = common.find_id(table, id_[0])
-    table = common.remove_record(table, record)
+    if record in table:
+        table = common.remove_record(table, record)
 
     return table
 
@@ -214,10 +219,8 @@ def write_to_file(table):
 
     full_path = os.getcwd()
     file_name = full_path + "/hr/persons.csv"
-    if os.path.exists('persons.csv'):
-        data_manager.write_table_to_file(file_name, table)
-    else:
-        ui.print_error_message("There is no such file!")
+
+    data_manager.write_table_to_file(file_name, table)
 
 
 def convert_to_int(table):

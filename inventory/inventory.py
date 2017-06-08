@@ -55,22 +55,24 @@ def start_module():
             table = remove(table, id_)
             write_to_file(table)
 
-        elif user_choice[0] == "4":
-            id_ = ui.get_inputs(["Id: "], "Type id of record to change")
-            table = update(table, id_)
-            write_to_file(table)
-            show_table(table)
-
-        elif user_choice[0] == "5":
-            list_of_items = get_available_items(table)
-            ui.print_result(list_of_items, "List of available items")
-
-        elif user_choice[0] == "6":
-            average_durability = get_average_durability_by_manufacturers(table)
-            ui.print_result(average_durability, "Get average durability by manufacturers dctionary")
-
         elif user_choice[0] == "0":
             display_menu = False
+
+        if len(table) > 0:
+
+            if user_choice[0] == "4":
+                id_ = ui.get_inputs(["Id: "], "Type id of record to change")
+                table = update(table, id_)
+                write_to_file(table)
+                show_table(table)
+
+            elif user_choice[0] == "5":
+                list_of_items = get_available_items(table)
+                ui.print_result(list_of_items, "List of available items")
+
+            elif user_choice[0] == "6":
+                average_durability = get_average_durability_by_manufacturers(table)
+                ui.print_result(average_durability, "Get average durability by manufacturers dctionary")
 
 
 def show_table(table):
@@ -134,7 +136,8 @@ def remove(table, id_):
     """
 
     record = common.find_id(table, id_[0])
-    table = common.remove_record(table, record)
+    if record in table:
+        table = common.remove_record(table, record)
 
     return table
 
